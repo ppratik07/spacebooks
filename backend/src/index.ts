@@ -8,6 +8,7 @@ app.use(express.json());
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
 
+//Endpoints
 app.post("/signup", async (req, res) => {
   const { success } = register.safeParse(req.body);
   if (!success) {
@@ -28,6 +29,10 @@ app.post("/signup", async (req, res) => {
     jwt: token,
   });
 });
+
+app.post('/signin',(req,res)=>{
+    
+})
 
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
