@@ -1,6 +1,7 @@
 import express from "express";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { register } from "./zod/Register";
+import { signin } from "./zod/Signin";
 const app = express();
 const PORT = 3000;
 
@@ -16,6 +17,7 @@ app.post("/signup", async (req, res) => {
       message: "Please send correct inputs",
     });
   }
+
   const user = await prisma.user.create({
     data: {
       username: req.body.username,
@@ -30,8 +32,29 @@ app.post("/signup", async (req, res) => {
   });
 });
 
-app.post('/signin',(req,res)=>{
-    
+app.post('/signin',async(req,res)=>{
+    const {success} = signin.safeParse(req.body);
+    if(!success){
+        res.status(411).json({
+            message : "Error signing in. Please check email and password!"
+        });
+    }
+    const getUser = await prisma.user.findUnique({
+        where: {
+          username: req.body.username,
+          password: req.body.password,
+        },
+      });
+      if(!getUser){
+            res.status(403).send({
+                message : "user not found/Incorrect credentials"
+            })
+      }
+      const token = await jwt.sign({id : getUser?.id},process.env.JWT_SECRET);
+      return res.status(200).json({
+        message: "User signied in successfully",
+        jwt: token,
+      });
 })
 
 app.listen(PORT, () => {
