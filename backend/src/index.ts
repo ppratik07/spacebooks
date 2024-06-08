@@ -53,7 +53,7 @@ app.post("/signin", async (req, res) => {
   }
   const token = await jwt.sign({ id: getUser?.id }, process.env.JWT_SECRET);
   return res.status(200).json({
-    message: "User signied in successfully",
+    message: "User signed in successfully",
     jwt: token,
   });
 });
