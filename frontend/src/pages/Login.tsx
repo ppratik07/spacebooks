@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Heading } from "../components/Heading"
 import InputBox from "../components/InputBox";
+import { signInApi } from "../api/api";
 interface SignInProps {
     onSignIn: (token: string, user: { id: string; name: string }) => void;
 }
@@ -25,7 +26,7 @@ export const Login: React.FC<SignInProps> = ({ onSignIn }) => {
         setError(null);
         setLoading(true);
         try {
-            const response = await signinAPI({username,password});
+            const response = await signInApi({username,password});
             onSignIn(response.token, response.user);
         } catch (error) {
             setError('Failed to sign in. Please check your credentials and try again.');
