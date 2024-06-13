@@ -108,5 +108,5 @@ app.get("/profile", authMiddleware, async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`app listening on $ {PORT}`);
+  console.log(`app listening on ${PORT}`);
 });
