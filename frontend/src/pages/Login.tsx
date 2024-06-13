@@ -4,7 +4,7 @@ import InputBox from "../components/InputBox";
 interface SignInProps {
     onSignIn: (token: string, user: { id: string; name: string }) => void;
 }
-export const Login: React.FC<SignInProps> = () => {
+export const Login: React.FC<SignInProps> = ({ onSignIn }) => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
@@ -16,15 +16,32 @@ export const Login: React.FC<SignInProps> = () => {
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
-
+    const handleSubmit = async(e : React.FormEvent<HTMLFormElement>) =>{
+        e.preventDefault();
+        if(username == '' || password == ''){
+            setError('Username and password are required');
+            return;
+        }
+        setError(null);
+        setLoading(true);
+        try {
+            const response = await signinAPI({username,password});
+            onSignIn(response.token, response.user);
+        } catch (error) {
+            setError('Failed to sign in. Please check your credentials and try again.');
+        } finally {
+            setLoading(false);
+        }
+    }
     return <div>
+        
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <Heading label={"Sign in to your account"} />
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" action="#" method="POST">
+                <form onSubmit={handleSubmit} className="space-y-6" action="#" method="POST">
                     <InputBox label={"Email address"} id={"email"} type={"email"} value={username} onChange={handleUsernameChange} />
 
                     <div>
