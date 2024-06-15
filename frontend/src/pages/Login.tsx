@@ -17,16 +17,16 @@ export const Login: React.FC<SignInProps> = ({ onSignIn }) => {
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
-    const handleSubmit = async(e : React.FormEvent<HTMLFormElement>) =>{
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(username == '' || password == ''){
+        if (username == '' || password == '') {
             setError('Username and password are required');
             return;
         }
         setError(null);
         setLoading(true);
         try {
-            const response = await signInApi({username,password});
+            const response = await signInApi({ username, password });
             onSignIn(response.token, response.user);
         } catch (error) {
             setError('Failed to sign in. Please check your credentials and try again.');
@@ -35,12 +35,10 @@ export const Login: React.FC<SignInProps> = ({ onSignIn }) => {
         }
     }
     return <div>
-        
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <Heading label={"Sign in to your account"} />
             </div>
-
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form onSubmit={handleSubmit} className="space-y-6" action="#" method="POST">
                     <InputBox label={"Email address"} id={"email"} type={"email"} value={username} onChange={handleUsernameChange} />
@@ -50,11 +48,13 @@ export const Login: React.FC<SignInProps> = ({ onSignIn }) => {
                     </div>
 
                     <div>
-                        <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+                        <button type="submit" className="flex w-full justify-center rounded-md
+                         bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm
+                          hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                           focus-visible:outline-indigo-600">Sign in</button>
                     </div>
                 </form>
             </div>
         </div>
-
     </div>
 }
