@@ -4,10 +4,13 @@ import { register } from "./zod/Register";
 import { signin } from "./zod/Signin";
 import authMiddleware from "./middlewares/auth";
 import { resetpassword } from "./zod/ResetPassword";
+const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
+app.use(cors());
 app.use(express.json());
+
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
 
