@@ -1,11 +1,7 @@
 import React, { useState } from "react"
 import { Heading } from "../components/Heading"
 import InputBox from "../components/InputBox";
-import { signInApi } from "../api/api";
-interface SignInProps {
-    onSignIn: (token: string, user: { id: string; name: string }) => void;
-}
-export const Login: React.FC<SignInProps> = ({ onSignIn }) => {
+export const Login = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
@@ -26,8 +22,18 @@ export const Login: React.FC<SignInProps> = ({ onSignIn }) => {
         setError(null);
         setLoading(true);
         try {
-            const response = await signInApi({ username, password });
-            onSignIn(response.token, response.user);
+            const response = await fetch('http://localhost:3000/signin', {
+                method: 'POST',
+                body: JSON.stringify({ username, password })
+            });
+            const data = await response.json();
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+                //@ts-ignore
+                window.location = "/profile";
+            } else {
+                alert("invalid credentials");
+            }
         } catch (error) {
             setError('Failed to sign in. Please check your credentials and try again.');
         } finally {
