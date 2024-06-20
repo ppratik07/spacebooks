@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Heading } from "../components/Heading"
 import InputBox from "../components/InputBox";
+import { BottomWarning } from "../components/Warning";
 export const Login = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -61,6 +62,7 @@ export const Login = () => {
                     </div>
                 </form>
             </div>
+            <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/register"} />
         </div>
     </div>
 }
