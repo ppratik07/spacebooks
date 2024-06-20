@@ -1,1 +1,1 @@
-## BUS Application
+## BUS SeatBook Application
