@@ -4,6 +4,7 @@ import InputBox from "../components/InputBox"
 import { SubHeading } from "../components/SubHeading"
 import { Button } from "../components/Button"
 import axios from "axios"
+import { BottomWarning } from "../components/Warning"
 
 export const Register = () => {
     const [email, setEmail] = useState<string>("");
@@ -41,6 +42,7 @@ export const Register = () => {
                         localStorage.setItem('token', response.data.token);
                     }} type={"submit"} label={"Submit"} />
                 </div>
+                <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />
             </div>
         </div>
     </div>
