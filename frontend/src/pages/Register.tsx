@@ -32,7 +32,7 @@ export const Register = () => {
                         setName(e.target.value);
                     }} />
                 </div>
-                <div>
+                <div className="py-2">
                     <Button onClick={async () => {
                         const response = await axios.post("http://localhost:3000/signup", {
                             email,
@@ -42,7 +42,7 @@ export const Register = () => {
                         localStorage.setItem('token', response.data.token);
                     }} type={"submit"} label={"Submit"} />
                 </div>
-                <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />
+                <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/login"} />
             </div>
         </div>
     </div>
