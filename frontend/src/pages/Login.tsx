@@ -43,7 +43,7 @@ export const Login = () => {
                         <InputBox label={"Password"} id={"password"} type={"password"} value={password} onChange={handlePasswordChange} />
                     </div>
 
-                    <div>
+                    <div className="py-2">
                            <Button onClick={handleSubmit} label={"Submit"}></Button>
                     </div>
             </div>
