@@ -2,11 +2,10 @@ import React, { useState } from "react"
 import { Heading } from "../components/Heading"
 import InputBox from "../components/InputBox";
 import { BottomWarning } from "../components/Warning";
+import { Button } from "../components/Button";
 export const Login = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
     };
@@ -16,29 +15,19 @@ export const Login = () => {
     };
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (username == '' || password == '') {
-            setError('Username and password are required');
-            return;
-        }
-        setError(null);
-        setLoading(true);
-        try {
-            const response = await fetch('http://localhost:3000/signin', {
-                method: 'POST',
-                body: JSON.stringify({ username, password })
-            });
-            const data = await response.json();
-            if (data.token) {
-                localStorage.setItem("token", data.token);
-                //@ts-ignore
-                window.location = "/profile";
-            } else {
-                alert("invalid credentials");
-            }
-        } catch (error) {
-            setError('Failed to sign in. Please check your credentials and try again.');
-        } finally {
-            setLoading(false);
+        const response = await fetch('http://localhost:3000/signin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        // Todo: Create a type for the response that you get back from the server
+        const data = await response.json();
+        if (data.token) {
+            localStorage.setItem("token", data.token)
+            //@ts-ignore
+            window.location = "/todos";
+        } else {
+            alert("invalid credentials");
         }
     }
     return <div>
@@ -47,7 +36,7 @@ export const Login = () => {
                 <Heading label={"Sign in to your account"} />
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form onSubmit={handleSubmit} className="space-y-6" action="#" method="POST">
+                
                     <InputBox label={"Email address"} id={"email"} type={"email"} value={username} onChange={handleUsernameChange} />
 
                     <div>
@@ -55,12 +44,12 @@ export const Login = () => {
                     </div>
 
                     <div>
-                        <button type="submit" className="flex w-full justify-center rounded-md
+                        {/* <button type="submit" className="flex w-full justify-center rounded-md
                          bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm
                           hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                           focus-visible:outline-indigo-600">Sign in</button>
+                           focus-visible:outline-indigo-600">Sign in</button> */}
+                           <Button onClick={handleSubmit} label={"Submit"}></Button>
                     </div>
-                </form>
             </div>
             <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/register"} />
         </div>
