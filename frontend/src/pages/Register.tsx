@@ -7,7 +7,7 @@ import axios from "axios"
 import { BottomWarning } from "../components/Warning"
 
 export const Register = () => {
-    const [email, setEmail] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [name, setName] = useState<string>("");
 
@@ -18,8 +18,8 @@ export const Register = () => {
                 <SubHeading label={"Enter your infromation to create an account"} />
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <InputBox label={"Email address"} id={"email"} type={"email"} value={email} onChange={(e) => {
-                    setEmail(e.target.value);
+                <InputBox label={"Email address"} id={"email"} type={"email"} value={username} onChange={(e) => {
+                    setUsername(e.target.value);
                 }} />
 
                 <div>
@@ -35,7 +35,7 @@ export const Register = () => {
                 <div className="py-2">
                     <Button onClick={async () => {
                         const response = await axios.post("http://localhost:3000/signup", {
-                            email,
+                            username,
                             password,
                             name
                         });
