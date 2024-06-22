@@ -38,16 +38,18 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/signin", async (req, res) => {
-  const { success } = signin.safeParse(req.body);
-  if (!success) {
-    res.status(411).json({
-      message: "Error signing in. Please check email and password!",
-    });
-  }
+    const {username,password} = req.body;
+//   const { success } = signin.safeParse(req.body);
+//   if (!success) {
+//     res.status(411).json({
+//       message: "Error signing in. Please check email and password!",
+//     });
+//   }
+
   const getUser = await prisma.user.findUnique({
     where: {
-      username: req.body.username,
-      password: req.body.password,
+      username,
+      password
     },
   });
   if (!getUser) {
@@ -55,10 +57,10 @@ app.post("/signin", async (req, res) => {
       message: "user not found/Incorrect credentials",
     });
   }
-  const token = await jwt.sign({ id: getUser?.id }, process.env.JWT_SECRET);
+  const token = await jwt.sign({ userid: getUser?.id }, process.env.JWT_SECRET);
   return res.status(200).json({
     message: "User signed in successfully",
-    jwt: token,
+    token,
   });
 });
 
