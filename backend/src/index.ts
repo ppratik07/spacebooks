@@ -22,19 +22,23 @@ app.post("/signup", async (req, res) => {
       message: "Please send correct inputs",
     });
   }
-
-  const user = await prisma.user.create({
-    data: {
-      username: req.body.username,
-      password: req.body.password,
-      name: req.body.name,
-    },
-  });
-  const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-  return res.status(200).json({
-    message: "User created successfully",
-    jwt: token,
-  });
+  try {
+    const user = await prisma.user.create({
+      data: {
+        username: req.body.username,
+        password: req.body.password,
+        name: req.body.name,
+      },
+    });
+    const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    return res.status(200).json({
+      message: "User created successfully",
+      jwt: token,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.post("/signin", async (req, res) => {
