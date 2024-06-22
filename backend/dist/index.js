@@ -17,7 +17,7 @@ const client_1 = require("@prisma/client");
 const Register_1 = require("./zod/Register");
 const auth_1 = __importDefault(require("./middlewares/auth"));
 const ResetPassword_1 = require("./zod/ResetPassword");
-const cors = require('cors');
+const cors = require("cors");
 const app = (0, express_1.default)();
 const PORT = 3000;
 app.use(cors());
@@ -26,37 +26,48 @@ const jwt = require("jsonwebtoken");
 const prisma = new client_1.PrismaClient();
 //Endpoints
 app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { success } = Register_1.register.safeParse(req.body);
-    if (!success) {
+    var _a, _b;
+    const parsedInput = Register_1.register.safeParse(req.body);
+    if (!parsedInput.success) {
         res.status(411).json({
             message: "Please send correct inputs",
         });
     }
-    const user = yield prisma.user.create({
-        data: {
-            username: req.body.username,
-            password: req.body.password,
-            name: req.body.name,
-        },
-    });
-    const token = yield jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-    return res.status(200).json({
-        message: "User created successfully",
-        jwt: token,
-    });
+    const username = (_a = parsedInput.data) === null || _a === void 0 ? void 0 : _a.username;
+    const password = (_b = parsedInput.data) === null || _b === void 0 ? void 0 : _b.password;
+    try {
+        const existingUser = yield prisma.user.findUnique({
+            where: {
+                username
+            }
+        });
+        if (existingUser) {
+            res.status(400).json({ error: "email is already registered" });
+        }
+        const newUser = yield prisma.user.create({
+            data: {
+                username: req.body.username,
+                password: req.body.password,
+                name: req.body.name,
+            },
+        });
+        const token = yield jwt.sign({ id: newUser.id }, process.env.JWT_SECRET);
+        return res.status(200).json({
+            message: "User created successfully",
+            jwt: token,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
 }));
 app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
-    //   const { success } = signin.safeParse(req.body);
-    //   if (!success) {
-    //     res.status(411).json({
-    //       message: "Error signing in. Please check email and password!",
-    //     });
-    //   }
     const getUser = yield prisma.user.findUnique({
         where: {
             username,
-            password
+            password,
         },
     });
     if (!getUser) {
@@ -72,9 +83,11 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 }));
 app.get("/reset-password", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { success } = ResetPassword_1.resetpassword.safeParse(req.body);
-    const user = yield prisma.user.findUnique({ where: { username: req.body.username } });
+    const user = yield prisma.user.findUnique({
+        where: { username: req.body.username },
+    });
     if (!user) {
-        return res.status(400).send('User not found');
+        return res.status(400).send("User not found");
     }
     //send email
     if (!success) {
@@ -87,19 +100,22 @@ app.get("/reset-password", (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.send("Password reset email sent");
     }
     catch (error) {
-        res.status(500).send('Error sending password reset email');
+        res.status(500).send("Error sending password reset email");
     }
 }));
-app.post('/reset-password/:token', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/reset-password/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.params;
     const { newPassword } = req.body;
     try {
         const decoded = jwt.verify(token, process.env.RESET_PASSWORD_SECRET);
-        yield prisma.user.update({ where: { id: decoded.userId }, data: { password: newPassword } });
-        res.send('Password reset successful');
+        yield prisma.user.update({
+            where: { id: decoded.userId },
+            data: { password: newPassword },
+        });
+        res.send("Password reset successful");
     }
     catch (error) {
-        res.status(500).send('Error resetting password');
+        res.status(500).send("Error resetting password");
     }
 }));
 app.get("/profile", auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
