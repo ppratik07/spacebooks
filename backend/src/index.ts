@@ -4,7 +4,7 @@ import { register } from "./zod/Register";
 import { signin } from "./zod/Signin";
 import authMiddleware from "./middlewares/auth";
 import { resetpassword } from "./zod/ResetPassword";
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
 const PORT = 3000;
 
@@ -38,18 +38,11 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/signin", async (req, res) => {
-    const {username,password} = req.body;
-//   const { success } = signin.safeParse(req.body);
-//   if (!success) {
-//     res.status(411).json({
-//       message: "Error signing in. Please check email and password!",
-//     });
-//   }
-
+  const { username, password } = req.body;
   const getUser = await prisma.user.findUnique({
     where: {
       username,
-      password
+      password,
     },
   });
   if (!getUser) {
@@ -64,13 +57,15 @@ app.post("/signin", async (req, res) => {
   });
 });
 
-app.get("/reset-password", async(req, res) => {
+app.get("/reset-password", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
-  const user = await prisma.user.findUnique({ where: { username : req.body.username } });
-    if (!user) {
-      return res.status(400).send('User not found');
-    }
-    //send email
+  const user = await prisma.user.findUnique({
+    where: { username: req.body.username },
+  });
+  if (!user) {
+    return res.status(400).send("User not found");
+  }
+  //send email
   if (!success) {
     res.status(411).json({
       message: "Please check the correct inputs",
@@ -78,27 +73,33 @@ app.get("/reset-password", async(req, res) => {
   }
   try {
     const resetToken = jwt.sign(
-      { userId: user.id  },
+      { userId: user.id },
       process.env.RESET_PASSWORD_SECRET as string,
       { expiresIn: "1h" }
     );
     res.send("Password reset email sent");
   } catch (error) {
-    res.status(500).send('Error sending password reset email');
+    res.status(500).send("Error sending password reset email");
   }
 });
 
-app.post('/reset-password/:token', async (req, res) => {
-    const { token } = req.params;
-    const { newPassword } = req.body;
-    try {
-      const decoded = jwt.verify(token, process.env.RESET_PASSWORD_SECRET as string) as { userId: number };
-      await prisma.user.update({ where: { id: decoded.userId }, data: { password: newPassword } });
-      res.send('Password reset successful');
-    } catch (error) {
-      res.status(500).send('Error resetting password');
-    }
-  });
+app.post("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.RESET_PASSWORD_SECRET as string
+    ) as { userId: number };
+    await prisma.user.update({
+      where: { id: decoded.userId },
+      data: { password: newPassword },
+    });
+    res.send("Password reset successful");
+  } catch (error) {
+    res.status(500).send("Error resetting password");
+  }
+});
 
 app.get("/profile", authMiddleware, async (req, res) => {
   try {
