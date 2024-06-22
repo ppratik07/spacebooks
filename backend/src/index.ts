@@ -16,21 +16,31 @@ const prisma = new PrismaClient();
 
 //Endpoints
 app.post("/signup", async (req, res) => {
-  const { success } = register.safeParse(req.body);
-  if (!success) {
+  const  parsedInput  = register.safeParse(req.body);
+  if (!parsedInput.success) {
     res.status(411).json({
       message: "Please send correct inputs",
     });
   }
+  const username = parsedInput.data?.username;
+  const password = parsedInput.data?.password;
   try {
-    const user = await prisma.user.create({
+    const existingUser = await prisma.user.findUnique({
+        where :{
+            username
+        }
+    });
+    if(existingUser){
+        res.status(400).json({error : "email is already registered"})
+    }
+    const newUser = await prisma.user.create({
       data: {
         username: req.body.username,
         password: req.body.password,
         name: req.body.name,
       },
     });
-    const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+    const token = await jwt.sign({ id: newUser.id }, process.env.JWT_SECRET);
     return res.status(200).json({
       message: "User created successfully",
       jwt: token,
