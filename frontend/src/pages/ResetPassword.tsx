@@ -16,7 +16,7 @@ export const ResetPassword = () => {
                 SetEmailSent(e.target.value);
             }} />
 
-            <div>
+            <div className="py-2">
                 <Button onClick={async () => {
 
                 }} type={"submit"} label={"Submit"} />
