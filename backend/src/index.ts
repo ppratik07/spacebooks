@@ -153,6 +153,10 @@ app.get("/seat-layout",authMiddleware, async (req, res) => {
   }
 });
 
+app.post('/reserve',(req,res)=>{
+    
+})
+
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
 });
