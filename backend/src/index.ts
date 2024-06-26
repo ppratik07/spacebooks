@@ -127,6 +127,11 @@ app.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
+
+app.get('/seat-layout',(req,res)=>{
+
+})
+
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
 });
