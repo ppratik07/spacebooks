@@ -20,7 +20,7 @@ model User {
   name         String?
   otp          String?
   otpExpiresAt DateTime?
-  reservation  Reservation[]
+  reservations  Reservation[]
 }
 
 model Seat {
@@ -28,7 +28,7 @@ model Seat {
   label       String
   x           Int
   y           Int
-  status      SeatStatus
+  status      SeatStatus    
   reservations Reservation[]
 }
 
