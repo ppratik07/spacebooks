@@ -128,7 +128,7 @@ app.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-app.get("/seat-layout", async (req, res) => {
+app.get("/seat-layout",authMiddleware, async (req, res) => {
   const queryParams = req.query as { date?: string };
   const { success, data, error } = dateSchema.safeParse(queryParams);
 
