@@ -5,6 +5,7 @@ import { signin } from "./zod/Signin";
 import authMiddleware from "./middlewares/auth";
 import { resetpassword } from "./zod/ResetPassword";
 import { dateSchema } from "./zod/DateSchema";
+import { reserveSchema } from "./zod/reserveSchema";
 const cors = require("cors");
 const app = express();
 const PORT = 3000;
@@ -154,7 +155,10 @@ app.get("/seat-layout",authMiddleware, async (req, res) => {
 });
 
 app.post('/reserve',(req,res)=>{
-    
+    const {success,data,error}= reserveSchema.safeParse(req.body);
+    if(!success){
+        return res.status(400).json({ error: error.errors.map((e) => e.message) });
+    }
 })
 
 app.listen(PORT, () => {
