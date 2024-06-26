@@ -4,6 +4,7 @@ import { register } from "./zod/Register";
 import { signin } from "./zod/Signin";
 import authMiddleware from "./middlewares/auth";
 import { resetpassword } from "./zod/ResetPassword";
+import { dateSchema } from "./zod/DateSchema";
 const cors = require("cors");
 const app = express();
 const PORT = 3000;
@@ -128,8 +129,26 @@ app.get("/profile", authMiddleware, async (req, res) => {
 });
 
 
-app.get('/seat-layout',(req,res)=>{
-
+app.get('/seat-layout',async(req,res)=>{
+    const {success,data,error } =  dateSchema.safeParse(req.query);
+    if(!success){
+        res.status(400).json({ error: error.errors.map(e => e.message) });
+    }
+    const {date} = data;
+    try {
+        const seats  = await prisma.user.findMany({
+            include :{
+                reservation:{
+                    where:{
+                        date: new Date(date),
+                    },
+                },
+            },
+        });
+        res.json(seats);
+    } catch (error) {
+        
+    }
 })
 
 app.listen(PORT, () => {
