@@ -17,7 +17,7 @@ const prisma = new PrismaClient();
 
 //Endpoints
 app.post("/signup", async (req, res) => {
-  const  parsedInput  = register.safeParse(req.body);
+  const parsedInput = register.safeParse(req.body);
   if (!parsedInput.success) {
     res.status(411).json({
       message: "Please send correct inputs",
@@ -27,12 +27,12 @@ app.post("/signup", async (req, res) => {
   const password = parsedInput.data?.password;
   try {
     const existingUser = await prisma.user.findUnique({
-        where :{
-            username
-        }
+      where: {
+        username,
+      },
     });
-    if(existingUser){
-        res.status(400).json({error : "email is already registered"})
+    if (existingUser) {
+      res.status(400).json({ error: "email is already registered" });
     }
     const newUser = await prisma.user.create({
       data: {
@@ -128,28 +128,30 @@ app.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
+app.get("/seat-layout", async (req, res) => {
+  const queryParams = req.query as { date?: string };
+  const { success, data, error } = dateSchema.safeParse(queryParams);
 
-app.get('/seat-layout',async(req,res)=>{
-    const {success,data,error } =  dateSchema.safeParse(req.query);
-    if(!success){
-        res.status(400).json({ error: error.errors.map(e => e.message) });
-    }
-    const {date} = data;
-    try {
-        const seats  = await prisma.user.findMany({
-            include :{
-                reservation:{
-                    where:{
-                        date: new Date(date),
-                    },
-                },
-            },
-        });
-        res.json(seats);
-    } catch (error) {
-        
-    }
-})
+  if (!success) {
+    return res.status(400).json({ error: error.errors.map((e) => e.message) });
+  }
+  const { date } = data;
+  try {
+    const seats = await prisma.seat.findMany({
+      include: {
+        reservations: {
+          where: {
+            date: new Date(date),
+          },
+        },
+      },
+    });
+
+    res.json(seats);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
