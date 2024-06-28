@@ -59,7 +59,7 @@ const SeatLayout: React.FC = () => {
         type="date"
         value={selectedDate}
         onChange={e => setSelectedDate(e.target.value)}
-        className="my-4 p-2 border border-gray-300 rounded"
+        className="my-4 p-2 border border-red-300 rounded"
       />
       <div className="grid grid-cols-10 gap-2">
         {seats.map(seat => (
