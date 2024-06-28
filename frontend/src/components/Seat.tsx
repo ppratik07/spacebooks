@@ -1,5 +1,13 @@
 import React from 'react';
 
+interface SeatProps {
+  seat: {
+    id: number;
+    label: string;
+    status: 'available' | 'reserved' | 'unavailable';
+  };
+  onClick: () => void;
+}
 
 const Seat: React.FC<SeatProps> = ({ seat, onClick }) => {
   const statusClasses = {
