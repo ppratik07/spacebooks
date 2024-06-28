@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { ResetPassword } from './pages/ResetPassword';
+import SeatLayout from './pages/SeatLayout';
 function App() {
     // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     // const [user, setUser] = useState<{ id: string; name: string } | null>(null);
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path='/resetpassword' element={<ResetPassword />} />
+                    <Route path='/seatlayout' element={<SeatLayout/>} />
                 </Routes>
             </BrowserRouter>
             {/* {isAuthenticated && <div>Welcome, {user?.name}!</div>} */}
