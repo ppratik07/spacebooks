@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface SeatProps {
   seat: {
     id: number;
@@ -9,7 +7,7 @@ interface SeatProps {
   onClick: () => void;
 }
 
-const Seat: React.FC<SeatProps> = ({ seat, onClick }) => {
+const Seat = ({ seat, onClick } : SeatProps) => {
   const statusClasses = {
     available: 'bg-green-500',
     reserved: 'bg-yellow-500',
