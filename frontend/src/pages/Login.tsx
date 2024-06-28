@@ -25,7 +25,7 @@ export const Login = () => {
         if (data.token) {
             localStorage.setItem("token", data.token)
             //@ts-ignore
-            window.location = "/todos";
+            window.location = "/seatlayout";
         } else {
             alert("invalid credentials");
         }
