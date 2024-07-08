@@ -4,12 +4,12 @@ import axios from 'axios';
 import Seat from '../components/Seat';
 
 interface SeatData {
-    id: number;
-    label: string;
-    status: 'available' | 'reserved' | 'unavailable';
-    x: number;
-    y: number;
-  }
+  id: number;
+  label: string;
+  status: 'available' | 'reserved' | 'unavailable';
+  x: number;
+  y: number;
+}
 
 const SeatLayout: React.FC = () => {
   const [seats, setSeats] = useState<SeatData[]>([]);
@@ -19,7 +19,7 @@ const SeatLayout: React.FC = () => {
   useEffect(() => {
     if (selectedDate) {
       axios
-        .get(`/seat-layout?date=${selectedDate}`, {
+        .get(`/api/seats?date=${selectedDate}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(response => {
@@ -35,7 +35,7 @@ const SeatLayout: React.FC = () => {
     if (seat.status === 'available') {
       axios
         .post(
-          '/reserve',
+          '/api/reserve',
           { seatId: seat.id, date: selectedDate },
           { headers: { Authorization: `Bearer ${token}` } }
         )
@@ -45,7 +45,6 @@ const SeatLayout: React.FC = () => {
               s.id === seat.id ? { ...s, status: 'reserved' } : s
             )
           );
-          console.log(response);
         })
         .catch(error => {
           console.error('Error reserving seat', error);
@@ -53,18 +52,25 @@ const SeatLayout: React.FC = () => {
     }
   };
 
+  // Create a 2D array representation of the seats for a grid layout
+  const seatMap: SeatData[][] = Array.from({ length: 10 }, (_, row) =>
+    seats.slice(row * 10, row * 10 + 10)
+  );
+
   return (
     <div className="seat-layout">
       <input
         type="date"
         value={selectedDate}
         onChange={e => setSelectedDate(e.target.value)}
-        className="my-4 p-2 border border-red-300 rounded"
+        className="my-4 p-2 border border-gray-300 rounded"
       />
       <div className="grid grid-cols-10 gap-2">
-        {seats.map(seat => (
-          <Seat key={seat.id} seat={seat} onClick={() => handleSeatClick(seat)} />
-        ))}
+        {seatMap.map((row, rowIndex) =>
+          row.map(seat => (
+            <Seat key={seat.id} seat={seat} onClick={() => handleSeatClick(seat)} />
+          ))
+        )}
       </div>
     </div>
   );
