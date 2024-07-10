@@ -65,7 +65,7 @@ const SeatLayout: React.FC = () => {
                 onChange={e => setSelectedDate(e.target.value)}
                 className="my-4 p-2 border border-gray-300 rounded"
             />
-            <div className="grid grid-cols-3 grid-rows-2">
+            <div className="grid grid-cols-3 grid-rows-2">                      
                 {seatMap.map((row, rowIndex) =>
                     row.map(seat => (
                         <Seat key={seat.id} seat={seat} onClick={() => handleSeatClick(seat)} />
