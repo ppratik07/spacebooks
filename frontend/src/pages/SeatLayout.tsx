@@ -85,26 +85,7 @@ const SeatLayout: React.FC = () => {
 
   return (
     <div className="movie-container flex flex-col items-center justify-center text-white">
-      <ul className="showcase flex justify-between bg-gray-800 p-2 rounded text-gray-400">
-        <li className="flex items-center mx-2">
-          <div className="seat bg-gray-600 h-3 w-4 rounded-t-md"></div>
-          <small className="ml-1">N/A</small>
-        </li>
-        <li className="flex items-center mx-2">
-          <div className="seat bg-blue-600 h-3 w-4 rounded-t-md"></div>
-          <small className="ml-1">Selected</small>
-        </li>
-        <li className="flex items-center mx-2">
-          <div className="seat bg-white h-3 w-4 rounded-t-md"></div>
-          <small className="ml-1">Occupied</small>
-        </li>
-      </ul>
-
-      <select onChange={handleMovieSelect} className="appearance-none bg-gray-700 p-2 mt-4 rounded">
-        <option value="10">Movie 1 ($10)</option>
-        <option value="12">Movie 2 ($12)</option>
-        <option value="8">Movie 3 ($8)</option>
-      </select>
+     
 
       <input
         type="date"
@@ -114,7 +95,6 @@ const SeatLayout: React.FC = () => {
       />
 
       <div className="container flex flex-col items-center mt-10">
-        <div className="screen bg-white w-3/4 h-16 my-4 transform rotate-x-45 shadow-lg"></div>
         {seats.map((row, rowIndex) => (
           <div key={rowIndex} className="row flex justify-center my-1">
             {row.map((seat, seatIndex) => (
@@ -133,6 +113,21 @@ const SeatLayout: React.FC = () => {
         <p className="text">Total Price: <span>${selectedSeatsCount * ticketPrice}</span></p>
         <button onClick={reserveSeats} className="bg-blue-500 text-white p-2 rounded">Reserve</button>
       </div>
+
+      <ul className="showcase flex justify-between bg-gray-800 p-2 rounded text-gray-400">
+        <li className="flex items-center mx-2">
+          <div className="seat bg-gray-600 h-3 w-4 rounded-t-md"></div>
+          <small className="ml-1">N/A</small>
+        </li>
+        <li className="flex items-center mx-2">
+          <div className="seat bg-blue-600 h-3 w-4 rounded-t-md"></div>
+          <small className="ml-1">Selected</small>
+        </li>
+        <li className="flex items-center mx-2">
+          <div className="seat bg-white h-3 w-4 rounded-t-md"></div>
+          <small className="ml-1">Occupied</small>
+        </li>
+      </ul>
     </div>
   );
 };
