@@ -5,6 +5,7 @@ import axios from 'axios';
 const SeatLayout: React.FC = () => {
   const [seats, setSeats] = useState(Array(6).fill(Array(8).fill('available')));
   const [selectedSeatsCount, setSelectedSeatsCount] = useState(0);
+  const [selectedSeats, setSelectedSeats] = useState<number[][]>([]);
   const [ticketPrice, setTicketPrice] = useState(10); // Assume default ticket price is 10
   const [selectedDate, setSelectedDate] = useState('');
   const [token, setToken] = useState(localStorage.getItem('token') || '');
@@ -23,6 +24,7 @@ const SeatLayout: React.FC = () => {
       } else {
         setSeats(Array(6).fill(Array(8).fill('available')));
         setSelectedSeatsCount(0);
+        setSelectedSeats([]);
       }
     };
 
@@ -35,9 +37,10 @@ const SeatLayout: React.FC = () => {
         row.map((seat, sIndex) => {
           if (rIndex === rowIndex && sIndex === seatIndex) {
             if (seat === 'available') {
-              reserveSeat(rowIndex, seatIndex);
+              setSelectedSeats([...selectedSeats, [rowIndex, seatIndex]]);
               return 'reserved';
             } else if (seat === 'reserved') {
+              setSelectedSeats(selectedSeats.filter(([r, s]) => r !== rowIndex || s !== seatIndex));
               return 'available';
             }
           }
@@ -49,17 +52,17 @@ const SeatLayout: React.FC = () => {
     });
   };
 
-  const reserveSeat = async (rowIndex: number, seatIndex: number) => {
-    const seatId = rowIndex * seats[0].length + seatIndex; // Calculate seat ID
+  const reserveSeats = async () => {
+    const seatIds = selectedSeats.map(([rowIndex, seatIndex]) => rowIndex * seats[0].length + seatIndex); // Calculate seat IDs
     try {
       await axios.post(
         '/api/reserve',
-        { seatId, date: selectedDate },
+        { seatIds, date: selectedDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log('Seat reserved successfully');
+      console.log('Seats reserved successfully');
     } catch (error) {
-      console.error('Error reserving seat', error);
+      console.error('Error reserving seats', error);
     }
   };
 
@@ -77,6 +80,7 @@ const SeatLayout: React.FC = () => {
     setSelectedDate(e.target.value);
     setSeats(Array(6).fill(Array(8).fill('available')));
     setSelectedSeatsCount(0);
+    setSelectedSeats([]);
   };
 
   return (
@@ -127,6 +131,7 @@ const SeatLayout: React.FC = () => {
       <div className="mt-4">
         <p className="text">Selected Seats: <span>{selectedSeatsCount}</span></p>
         <p className="text">Total Price: <span>${selectedSeatsCount * ticketPrice}</span></p>
+        <button onClick={reserveSeats} className="bg-blue-500 text-white p-2 rounded">Reserve</button>
       </div>
     </div>
   );
