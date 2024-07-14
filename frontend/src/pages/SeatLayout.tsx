@@ -6,7 +6,6 @@ const SeatLayout: React.FC = () => {
     const [seats, setSeats] = useState(Array(6).fill(Array(8).fill('available')));
     const [selectedSeatsCount, setSelectedSeatsCount] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState<number[][]>([]);
-    const [ticketPrice, setTicketPrice] = useState(10); // Assume default ticket price is 10
     const [selectedDate, setSelectedDate] = useState('');
     const [token, setToken] = useState(localStorage.getItem('token') || '');
 
@@ -69,11 +68,6 @@ const SeatLayout: React.FC = () => {
     const updateSelectedCount = (updatedSeats: string[][]) => {
         const selectedSeatsCount = updatedSeats.flat().filter(seat => seat === 'reserved').length;
         setSelectedSeatsCount(selectedSeatsCount);
-    };
-
-    const handleMovieSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setTicketPrice(+e.target.value);
-        updateSelectedCount(seats);
     };
 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
