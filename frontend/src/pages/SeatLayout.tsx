@@ -52,11 +52,11 @@ const SeatLayout: React.FC = () => {
     };
 
     const reserveSeats = async () => {
-        const seatIds = selectedSeats.map(([rowIndex, seatIndex]) => rowIndex * seats[0].length + seatIndex); // Calculate seat IDs
+        const seatId = selectedSeats.map(([rowIndex, seatIndex]) => rowIndex * seats[0].length + seatIndex); // Calculate seat IDs
         try {
             await axios.post(
                 'http://localhost:3000/reserve',
-                { seatIds, date: selectedDate },
+                { seatId, date: selectedDate },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             console.log('Seats reserved successfully');
