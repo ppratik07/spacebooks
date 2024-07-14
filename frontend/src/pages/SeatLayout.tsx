@@ -104,7 +104,6 @@ const SeatLayout: React.FC = () => {
 
             <div className="mt-4 flex flex-col items-center justify-center">
                 <p className=" text-violet-600">Selected Seats: <span>{selectedSeatsCount}</span></p>
-                {/* <p className=" text-violet-600">Total Price: <span>${selectedSeatsCount * ticketPrice}</span></p> */}
                 <button onClick={reserveSeats} className="bg-blue-500 text-white p-2 rounded mt-2">Reserve</button>
             </div>
             <div className='mt-4'>
