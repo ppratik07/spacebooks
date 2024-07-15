@@ -154,7 +154,7 @@ app.get("/seat-layout", auth_1.default, (req, res) => __awaiter(void 0, void 0, 
         res.status(500).json({ error: "Internal server error" });
     }
 }));
-app.post("/reserve", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/reserve", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //   const { success, data, error } = reserveSchema.safeParse(req.body);
     //   if (!success) {
     //     return res.status(400).json({ error: error.errors.map((e) => e.message) });
