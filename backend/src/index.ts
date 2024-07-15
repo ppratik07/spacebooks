@@ -154,12 +154,12 @@ app.get("/seat-layout", authMiddleware, async (req, res) => {
   }
 });
 
-app.post("/reserve",authMiddleware, async (req, res) => {
-  const { success, data, error } = reserveSchema.safeParse(req.body);
-  if (!success) {
-    return res.status(400).json({ error: error.errors.map((e) => e.message) });
-  }
-  const { seatId, date } = data;
+app.post("/reserve", async (req, res) => {
+//   const { success, data, error } = reserveSchema.safeParse(req.body);
+//   if (!success) {
+//     return res.status(400).json({ error: error.errors.map((e) => e.message) });
+//   }
+  const { seatId, date } = req.body;
   try {
     const seat = await prisma.seat.findUnique({
       where: {
