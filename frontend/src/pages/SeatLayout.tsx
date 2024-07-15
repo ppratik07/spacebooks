@@ -53,12 +53,19 @@ const SeatLayout: React.FC = () => {
 
     const reserveSeats = async () => {
         const seatId = selectedSeats.map(([rowIndex, seatIndex]) => rowIndex * seats[0].length + seatIndex); // Calculate seat IDs
+        //For static , taking today's date 
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = today.getFullYear();
+
+        const formattedDate = `${day}/${month}/${year}`;
         try {
             await axios.post(
                 '/api/reserve',
-                { seatId, date: selectedDate },
+                { seatId, date: formattedDate },
                 { headers: { Authorization: `Bearer ${token}` } }
-              );
+            );
             console.log('Seats reserved successfully');
         } catch (error) {
             console.error('Error reserving seats', error);
