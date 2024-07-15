@@ -18,7 +18,6 @@ const Register_1 = require("./zod/Register");
 const auth_1 = __importDefault(require("./middlewares/auth"));
 const ResetPassword_1 = require("./zod/ResetPassword");
 const DateSchema_1 = require("./zod/DateSchema");
-const reserveSchema_1 = require("./zod/reserveSchema");
 const cors = require("cors");
 const app = (0, express_1.default)();
 const PORT = 3000;
@@ -155,12 +154,12 @@ app.get("/seat-layout", auth_1.default, (req, res) => __awaiter(void 0, void 0, 
         res.status(500).json({ error: "Internal server error" });
     }
 }));
-app.post("/reserve", auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { success, data, error } = reserveSchema_1.reserveSchema.safeParse(req.body);
-    if (!success) {
-        return res.status(400).json({ error: error.errors.map((e) => e.message) });
-    }
-    const { seatId, date } = data;
+app.post("/reserve", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //   const { success, data, error } = reserveSchema.safeParse(req.body);
+    //   if (!success) {
+    //     return res.status(400).json({ error: error.errors.map((e) => e.message) });
+    //   }
+    const { seatId, date } = req.body;
     try {
         const seat = yield prisma.seat.findUnique({
             where: {
