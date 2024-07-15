@@ -62,7 +62,7 @@ const SeatLayout: React.FC = () => {
         const formattedDate = `${day}/${month}/${year}`;
         try {
             await axios.post(
-                '/api/reserve',
+                "http://localhost:3000/api/reserve",
                 { seatId : seatId, date: formattedDate }
                 // { headers: { Authorization: `Bearer ${token}` } }
             );
