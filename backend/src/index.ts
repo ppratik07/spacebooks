@@ -156,7 +156,7 @@ app.get("/seat-layout", authMiddleware, async (req, res) => {
 
 app.post("/api/reserve", async (req, res) => {
   const { seatId, date } = req.body;
-  const userId = 3; // Extracted from the token
+  const userId = 3; 
 
   if (!userId) {
     return res.status(400).json({ error: "User ID not found" });
