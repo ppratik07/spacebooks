@@ -155,37 +155,42 @@ app.get("/seat-layout", authMiddleware, async (req, res) => {
 });
 
 app.post("/api/reserve", async (req, res) => {
-//   const { success, data, error } = reserveSchema.safeParse(req.body);
-//   if (!success) {
-//     return res.status(400).json({ error: error.errors.map((e) => e.message) });
-//   }
   const { seatId, date } = req.body;
+  const userId = 3; // Extracted from the token
+
+  if (!userId) {
+    return res.status(400).json({ error: "User ID not found" });
+  }
+  const formattedDate = new Date(date);
+
+  if (isNaN(formattedDate.getTime())) {
+    return res.status(400).json({ error: "Invalid date format" });
+  }
   try {
-    const seat = await prisma.seat.findUnique({
-      where: {
-        id: seatId,
-      },
-    });
-    if (!seat || seat.status !== "available") {
-      return res.status(400).json({
-        message: "Seat not available",
+    // Start a transaction
+    const reservation = await prisma.$transaction(async (prisma) => {
+      // Create a new reservation
+      const newReservation = await prisma.reservation.create({
+        data: {
+          date: formattedDate,
+          userId,
+          seatId,
+        },
       });
-    }
-    await prisma.reservation.create({
-      data: {
-        date: new Date(date),
-        userId: (req as any).user.userId,
-        seatId,
-      },
+
+      // Update the seat status
+      await prisma.seat.update({
+        where: { id: seatId },
+        data: { status: "reserved" },
+      });
+
+      return newReservation;
     });
 
-    await prisma.seat.update({
-      where: { id: seatId },
-      data: { status: "reserved" },
-    });
-    res.json({ message: "Seat reserved successfully" });
+    res.json({ success: true, reservation });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Error reserving seat", error);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
