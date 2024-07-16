@@ -169,7 +169,6 @@ app.post("/api/reserve", async (req, res) => {
   try {
     // Start a transaction
     const reservation = await prisma.$transaction(async (prisma) => {
-      // Create a new reservation
       const newReservation = await prisma.reservation.create({
         data: {
           date: formattedDate,
