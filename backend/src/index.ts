@@ -186,7 +186,7 @@ app.post("/api/reserve", async (req, res) => {
       return newReservation;
     });
 
-    res.json({ success: true, reservation });
+    res.json({ success: true });
   } catch (error) {
     console.error("Error reserving seat", error);
     res.status(500).json({ error: "An unexpected error occurred" });
