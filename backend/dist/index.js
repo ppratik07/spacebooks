@@ -155,38 +155,39 @@ app.get("/seat-layout", auth_1.default, (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 app.post("/api/reserve", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { seatId, date } = req.body;
-    const userId = 3; // Extracted from the token
+    const { seatIds, date } = req.body; // Accepting seatIds as an array
+    const userId = 1; // Extracted from the token
+    console.log('Received reservation request:', req.body);
+    console.log('Extracted user ID:', userId);
+    console.log('Extracted user ID:', date);
     if (!userId) {
-        return res.status(400).json({ error: "User ID not found" });
+        return res.status(400).json({ error: 'User ID not found' });
     }
-    const formattedDate = new Date(date);
-    if (isNaN(formattedDate.getTime())) {
-        return res.status(400).json({ error: "Invalid date format" });
+    if (!Array.isArray(seatIds) || seatIds.length === 0) {
+        return res.status(400).json({ error: 'Invalid seat IDs' });
     }
     try {
-        // Start a transaction
-        const reservation = yield prisma.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
-            // Create a new reservation
+        const newReservations = [];
+        for (const seatId of seatIds) {
             const newReservation = yield prisma.reservation.create({
                 data: {
-                    date: formattedDate,
+                    date,
                     userId,
                     seatId,
                 },
             });
-            // Update the seat status
             yield prisma.seat.update({
                 where: { id: seatId },
-                data: { status: "reserved" },
+                data: { status: 'reserved' },
             });
-            return newReservation;
-        }));
-        res.json({ success: true, reservation });
+            newReservations.push(newReservation);
+        }
+        console.log('Seats reserved successfully:', newReservations);
+        res.json({ success: true, reservations: newReservations });
     }
     catch (error) {
-        console.error("Error reserving seat", error);
-        res.status(500).json({ error: "An unexpected error occurred" });
+        console.error('Error reserving seats', error);
+        res.status(500).json({ error: 'An unexpected error occurred' });
     }
 }));
 app.listen(PORT, () => {
