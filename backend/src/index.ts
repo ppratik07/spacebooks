@@ -155,42 +155,48 @@ app.get("/seat-layout", authMiddleware, async (req, res) => {
 });
 
 app.post("/api/reserve", async (req, res) => {
-  const { seatId, date } = req.body;
-  const userId = 3; 
+    const { seatIds ,date} = req.body; // Accepting seatIds as an array
+    const userId = 1; // Extracted from the token
+  
+    console.log('Received reservation request:', req.body);
+    console.log('Extracted user ID:', userId);
+    console.log('Extracted date:', date);
 
-  if (!userId) {
-    return res.status(400).json({ error: "User ID not found" });
-  }
-  const formattedDate = new Date(date);
-
-  if (isNaN(formattedDate.getTime())) {
-    return res.status(400).json({ error: "Invalid date format" });
-  }
-  try {
-    // Start a transaction
-    const reservation = await prisma.$transaction(async (prisma) => {
-      const newReservation = await prisma.reservation.create({
-        data: {
-          date: formattedDate,
-          userId,
-          seatId,
-        },
-      });
-
-      // Update the seat status
-      await prisma.seat.update({
-        where: { id: seatId },
-        data: { status: "reserved" },
-      });
-
-      return newReservation;
-    });
-
-    res.json({ success: true });
-  } catch (error) {
-    console.error("Error reserving seat", error);
-    res.status(500).json({ error: "An unexpected error occurred" });
-  }
+  
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID not found' });
+    }
+  
+    // if (!Array.isArray(seatIds) || seatIds.length === 0) {
+    //   return res.status(400).json({ error: 'Invalid seat IDs' });
+    // }
+  
+    try {
+      const newReservations = [];
+  
+      for (const seatId of seatIds) {
+        const newReservation = await prisma.reservation.create({
+          data: {
+            date,
+            userId,
+            seatId,
+          },
+        });
+  
+        await prisma.seat.update({
+          where: { id: seatId },
+          data: { status: 'reserved' },
+        });
+  
+        newReservations.push(newReservation);
+      }
+  
+      console.log('Seats reserved successfully:', newReservations);
+      res.json({ success: true, reservations: newReservations });
+    } catch (error) {
+      console.error('Error reserving seats', error);
+      res.status(500).json({ error: 'An unexpected error occurred' });
+    }
 });
 
 app.listen(PORT, () => {
