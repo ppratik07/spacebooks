@@ -154,6 +154,40 @@ app.get("/seat-layout", auth_1.default, (req, res) => __awaiter(void 0, void 0, 
         res.status(500).json({ error: "Internal server error" });
     }
 }));
+app.get('/api/seats', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const selectedDate = req.query.date;
+    if (!selectedDate) {
+        return res.status(400).json({ error: 'Date is required' });
+    }
+    console.log(selectedDate);
+    try {
+        // Parse the selected date
+        const date = new Date(selectedDate);
+        // Query the reservations for the given date
+        const reservations = yield prisma.reservation.findMany({
+            where: {
+                date: {
+                    equals: date
+                }
+            },
+            include: {
+                seat: true
+            }
+        });
+        // Get all seats
+        const seats = yield prisma.seat.findMany();
+        // Map the seat reservations to seat status
+        const seatStatus = seats.map(seat => {
+            const reserved = reservations.find(reservation => reservation.seatId === seat.id);
+            return Object.assign(Object.assign({}, seat), { status: reserved ? 'reserved' : 'available' });
+        });
+        res.status(200).json(seatStatus);
+    }
+    catch (error) {
+        console.error('Error fetching seats', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}));
 app.post("/api/reserve", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // const user = (req as unknown as Request & { user: UserPayload }).user; 
@@ -161,9 +195,8 @@ app.post("/api/reserve", (req, res) => __awaiter(void 0, void 0, void 0, functio
         // if (!user) {
         //   return res.status(401).send({ error: 'User not authenticated' });
         // }
-        const userId = 1; // Extracted from the token
+        const userId = 1;
         const { seatId, date } = req.body;
-        // Debugging information
         console.log('Received reservation request:', { seatId, date });
         console.log('Extracted user ID:', userId);
         // Check if the user exists in the database
