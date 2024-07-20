@@ -155,29 +155,30 @@ app.get("/seat-layout", auth_1.default, (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 app.post("/api/reserve", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { seatIds, date } = req.body; // Accepting seatIds as an array
+    const { seatId, date } = req.body; // Accepting seatIds as an array
     const userId = 1; // Extracted from the token
     console.log('Received reservation request:', req.body);
     console.log('Extracted user ID:', userId);
-    console.log('Extracted user ID:', date);
+    console.log('Extracted date:', date);
     if (!userId) {
         return res.status(400).json({ error: 'User ID not found' });
     }
-    if (!Array.isArray(seatIds) || seatIds.length === 0) {
-        return res.status(400).json({ error: 'Invalid seat IDs' });
-    }
+    // if (!Array.isArray(seatIds) || seatIds.length === 0) {
+    //   return res.status(400).json({ error: 'Invalid seat IDs' });
+    // }
     try {
         const newReservations = [];
-        for (const seatId of seatIds) {
+        for (const id of seatId) {
             const newReservation = yield prisma.reservation.create({
                 data: {
                     date,
                     userId,
-                    seatId,
+                    seatId: id,
+                    // Remove the date field as per your requirement
                 },
             });
             yield prisma.seat.update({
-                where: { id: seatId },
+                where: { id },
                 data: { status: 'reserved' },
             });
             newReservations.push(newReservation);
