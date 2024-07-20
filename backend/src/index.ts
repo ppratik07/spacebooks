@@ -6,6 +6,7 @@ import authMiddleware from "./middlewares/auth";
 import { resetpassword } from "./zod/ResetPassword";
 import { dateSchema } from "./zod/DateSchema";
 import { reserveSchema } from "./zod/reserveSchema";
+import { UserPayload } from './models/UserPayload';
 const cors = require("cors");
 const app = express();
 const PORT = 3000;
@@ -155,48 +156,51 @@ app.get("/seat-layout", authMiddleware, async (req, res) => {
 });
 
 app.post("/api/reserve", async (req, res) => {
-    const { seatId ,date} = req.body; // Accepting seatIds as an array
-    const userId = 1; // Extracted from the token
-  
-    console.log('Received reservation request:', req.body);
-    console.log('Extracted user ID:', userId);
-    console.log('Extracted date:', date);
-
-  
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID not found' });
-    }
-  
-    // if (!Array.isArray(seatIds) || seatIds.length === 0) {
-    //   return res.status(400).json({ error: 'Invalid seat IDs' });
+  try {
+    // const user = (req as unknown as Request & { user: UserPayload }).user; 
+    // console.log(user);
+    // if (!user) {
+    //   return res.status(401).send({ error: 'User not authenticated' });
     // }
-  
-    try {
-      const newReservations = [];
-  
-      for (const id of seatId) {
-        const newReservation = await prisma.reservation.create({
-          data: {
-            date,
-            userId,
-            seatId: id,
-            // Remove the date field as per your requirement
-          },
-        });
-        await prisma.seat.update({
-          where: { id },
-          data: { status: 'reserved' },
-        });  
-  
-        newReservations.push(newReservation);
+
+    const userId = 1; 
+    const { seatId, date } = req.body;
+    console.log('Received reservation request:', { seatId, date });
+    console.log('Extracted user ID:', userId);
+
+    // Check if the user exists in the database
+    // const existingUser = await prisma.user.findUnique({
+    //   where: { id: userId }
+    // });
+
+    // if (!existingUser) {
+    //   return res.status(400).send({ error: 'Invalid user ID' });
+    // }
+
+    // const newReservations = [];
+    const ISODateFormatted = new Date().toISOString();
+    // for (const id of seatId) {
+    //   const newReservation = await prisma.reservation.create({
+    //     data: {
+    //       userId,
+    //       seatId: id,
+    //       date: ISODateFormatted
+    //     }
+    //   });
+    //   newReservations.push(newReservation);
+    // }
+    const newReservation = await prisma.reservation.create({
+      data:{
+        userId : userId,
+        seatId : seatId,
+        date : ISODateFormatted
       }
-  
-      console.log('Seats reserved successfully:', newReservations);
-      res.json({ success: true, reservations: newReservations });
-    } catch (error) {
-      console.error('Error reserving seats', error);
-      res.status(500).json({ error: 'An unexpected error occurred' });
-    }
+    })
+    res.status(200).send({ message: 'Seats reserved successfully', newReservation });
+  } catch (error) {
+    console.error('Error reserving seats', error);
+    res.status(500).send({ error: 'Error reserving seats' });
+  }
 });
 
 app.listen(PORT, () => {
