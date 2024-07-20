@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-
+import { UserPayload } from '../models/UserPayload';
 const { JWTSECRET }: any = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
 
@@ -12,7 +12,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const decode = jwt.verify(token, JWTSECRET);
-    (req as any).user = decode;
+    (req as any).user = decode as UserPayload;
     next();
   } catch (error) {
     res.status(400).send("Invalid token.");
