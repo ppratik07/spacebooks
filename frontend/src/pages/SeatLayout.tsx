@@ -1,11 +1,9 @@
-// src/components/SeatLayout.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const SeatLayout: React.FC = () => {
     const [seats, setSeats] = useState(Array(6).fill(Array(8).fill('available')));
-    const [selectedSeatsCount, setSelectedSeatsCount] = useState(0);
-    const [selectedSeats, setSelectedSeats] = useState<number[][]>([]);
+    const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
     const [selectedDate, setSelectedDate] = useState('');
     const [token, setToken] = useState(localStorage.getItem('token') || '');
 
@@ -22,8 +20,6 @@ const SeatLayout: React.FC = () => {
                 }
             } else {
                 setSeats(Array(6).fill(Array(8).fill('available')));
-                setSelectedSeatsCount(0);
-                setSelectedSeats([]);
             }
         };
 
@@ -31,63 +27,51 @@ const SeatLayout: React.FC = () => {
     }, [selectedDate, token]);
 
     const handleSeatClick = (rowIndex: number, seatIndex: number) => {
-        setSeats(prevSeats => {
-            const updatedSeats = prevSeats.map((row, rIndex) =>
-                row.map((seat, sIndex) => {
-                    if (rIndex === rowIndex && sIndex === seatIndex) {
-                        if (seat === 'available') {
-                            setSelectedSeats([...selectedSeats, [rowIndex, seatIndex]]);
-                            return 'reserved';
-                        } else if (seat === 'reserved') {
-                            setSelectedSeats(selectedSeats.filter(([r, s]) => r !== rowIndex || s !== seatIndex));
-                            return 'available';
-                        }
-                    }
-                    return seat;
-                })
-            );
-            updateSelectedCount(updatedSeats);
-            return updatedSeats;
-        });
-    };
-
-    const reserveSeats = async () => {
-        const seatId = selectedSeats.map(([rowIndex, seatIndex]) => rowIndex * seats[0].length + seatIndex); // Calculate seat IDs
-        //For static , taking today's date 
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        const year = today.getFullYear();
-
-        const formattedDate = `${day}/${month}/${year}`;
-        try {
-            await axios.post(
-                "http://localhost:3000/api/reserve",
-                { seatId : seatId, date: formattedDate }
-                // { headers: { Authorization: `Bearer ${token}` } }
-            );
-            console.log('Seats reserved successfully');
-        } catch (error) {
-            console.error('Error reserving seats', error);
+        const seatId = rowIndex * seats[0].length + seatIndex;
+        if (seats[rowIndex][seatIndex] === 'available') {
+            if (selectedSeat === null) {
+                setSelectedSeat(seatId);
+            } else if (selectedSeat === seatId) {
+                setSelectedSeat(null); // Deselect if already selected
+            } else {
+                alert('You can only select one seat at a time.');
+            }
         }
     };
 
-    const updateSelectedCount = (updatedSeats: string[][]) => {
-        const selectedSeatsCount = updatedSeats.flat().filter(seat => seat === 'reserved').length;
-        setSelectedSeatsCount(selectedSeatsCount);
+    const reserveSeats = async () => {
+        if (selectedSeat === null) {
+            alert('Please select a seat before reserving.');
+            return;
+        }
+
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        const formattedDate = `${year}-${month}-${day}`;
+
+        try {
+            await axios.post(
+                "http://localhost:3000/api/reserve",
+                { seatId: selectedSeat, date: formattedDate }
+                // { headers: { Authorization: `Bearer ${token}` } }
+            );
+            console.log('Seat reserved successfully');
+            setSelectedSeat(null); // Deselect after successful reservation
+        } catch (error) {
+            console.error('Error reserving seat', error);
+        }
     };
 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedDate(e.target.value);
         setSeats(Array(6).fill(Array(8).fill('available')));
-        setSelectedSeatsCount(0);
-        setSelectedSeats([]);
+        setSelectedSeat(null);
     };
 
     return (
         <div className="movie-container flex flex-col items-center justify-center text-white">
-
-
             <input
                 type="date"
                 value={selectedDate}
@@ -98,19 +82,23 @@ const SeatLayout: React.FC = () => {
             <div className="container flex flex-col items-center mt-10">
                 {seats.map((row, rowIndex) => (
                     <div key={rowIndex} className="row flex justify-center my-1">
-                        {row.map((seat, seatIndex) => (
-                            <div
-                                key={seatIndex}
-                                className={`seat h-10 w-10 m-1 rounded-t-md ${seat === 'available' ? 'bg-gray-600' : seat === 'reserved' ? 'bg-blue-600' : 'bg-white cursor-not-allowed'}`}
-                                onClick={() => handleSeatClick(rowIndex, seatIndex)}
-                            ></div>
-                        ))}
+                        {row.map((seat, seatIndex) => {
+                            const seatId = rowIndex * seats[0].length + seatIndex;
+                            const isSelected = selectedSeat === seatId;
+                            return (
+                                <div
+                                    key={seatIndex}
+                                    className={`seat h-10 w-10 m-1 rounded-t-md ${seat === 'available' ? (isSelected ? 'bg-blue-600' : 'bg-gray-600') : 'bg-white cursor-not-allowed'}`}
+                                    onClick={() => handleSeatClick(rowIndex, seatIndex)}
+                                ></div>
+                            );
+                        })}
                     </div>
                 ))}
             </div>
 
             <div className="mt-4 flex flex-col items-center justify-center">
-                <p className=" text-violet-600">Selected Seats: <span>{selectedSeatsCount}</span></p>
+                <p className="text-violet-600">Selected Seat: <span>{selectedSeat !== null ? selectedSeat : 'None'}</span></p>
                 <button onClick={reserveSeats} className="bg-blue-500 text-white p-2 rounded mt-2">Reserve</button>
             </div>
             <div className='mt-4'>
@@ -129,7 +117,6 @@ const SeatLayout: React.FC = () => {
                     </li>
                 </ul>
             </div>
-
         </div>
     );
 };
