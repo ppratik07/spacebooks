@@ -156,30 +156,30 @@ app.get("/seat-layout", auth_1.default, (req, res) => __awaiter(void 0, void 0, 
 }));
 app.get('/api/seats', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const selectedDate = req.query.date;
-    if (!selectedDate) {
-        return res.status(400).json({ error: 'Date is required' });
-    }
     console.log(selectedDate);
+    if (!selectedDate) {
+        return res.status(400).json({ error: 'Date parameter is required' });
+    }
     try {
-        // Parse the selected date
         const date = new Date(selectedDate);
-        // Query the reservations for the given date
         const reservations = yield prisma.reservation.findMany({
             where: {
-                date: {
-                    equals: date
-                }
+                date: date,
             },
             include: {
-                seat: true
-            }
+                seat: true,
+            },
         });
-        // Get all seats
         const seats = yield prisma.seat.findMany();
-        // Map the seat reservations to seat status
-        const seatStatus = seats.map(seat => {
-            const reserved = reservations.find(reservation => reservation.seatId === seat.id);
-            return Object.assign(Object.assign({}, seat), { status: reserved ? 'reserved' : 'available' });
+        const seatStatus = seats.map((seat) => {
+            const reserved = reservations.find((reservation) => reservation.seatId === seat.id);
+            return {
+                id: seat.id,
+                label: seat.label,
+                x: seat.x,
+                y: seat.y,
+                status: reserved ? 'reserved' : 'available',
+            };
         });
         res.status(200).json(seatStatus);
     }

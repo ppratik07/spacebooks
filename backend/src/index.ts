@@ -155,37 +155,34 @@ app.get("/seat-layout", authMiddleware, async (req, res) => {
   }
 });
 
-app.get('/api/seats',async(req,res)=>{
-   const selectedDate = req.query.date as string;
-   if(!selectedDate){
-    return res.status(400).json({ error: 'Date is required' });
-   }
-   console.log(selectedDate);
-   try {
-    // Parse the selected date
+app.get('/api/seats', async (req, res) => {
+  const selectedDate = req.query.date as string;
+  console.log(selectedDate);
+  if (!selectedDate) {
+    return res.status(400).json({ error: 'Date parameter is required' });
+  }
+
+  try {
     const date = new Date(selectedDate);
-    
-    // Query the reservations for the given date
     const reservations = await prisma.reservation.findMany({
       where: {
-        date: {
-          equals: date
-        }
+        date: date,
       },
       include: {
-        seat: true
-      }
+        seat: true,
+      },
     });
 
-    // Get all seats
     const seats = await prisma.seat.findMany();
 
-    // Map the seat reservations to seat status
-    const seatStatus = seats.map(seat => {
-      const reserved = reservations.find(reservation => reservation.seatId === seat.id);
+    const seatStatus = seats.map((seat) => {
+      const reserved = reservations.find((reservation) => reservation.seatId === seat.id);
       return {
-        ...seat,
-        status: reserved ? 'reserved' : 'available'
+        id: seat.id,
+        label: seat.label,
+        x: seat.x,
+        y: seat.y,
+        status: reserved ? 'reserved' : 'available',
       };
     });
 
