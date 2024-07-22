@@ -12,7 +12,6 @@ interface Seat {
 const SeatLayout: React.FC = () => {
   const [seats, setSeats] = useState<Seat[][]>([]);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null);
-  const [selectedSeatLabel, setSelectedSeatLabel] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
@@ -40,9 +39,23 @@ const SeatLayout: React.FC = () => {
           console.error('Error fetching seats', error);
         }
       } else {
-        setSeats(Array(6).fill(Array(8).fill({ id: 0, label: '', x: 0, y: 0, status: 'available' })));
+        // Initialize with mock data for testing
+        const mockSeats: Seat[][] = [];
+        for (let i = 0; i < 6; i++) {
+          const row: Seat[] = [];
+          for (let j = 0; j < 8; j++) {
+            row.push({
+              id: i * 8 + j + 1,
+              label: `${i * 8 + j + 1}`,
+              x: i,
+              y: j,
+              status: 'available',
+            });
+          }
+          mockSeats.push(row);
+        }
+        setSeats(mockSeats);
         setSelectedSeat(null);
-        setSelectedSeatLabel('');
       }
     };
 
@@ -57,7 +70,6 @@ const SeatLayout: React.FC = () => {
         row.map((seat, sIndex) => {
           if (rIndex === rowIndex && sIndex === seatIndex) {
             setSelectedSeat(seat);
-            setSelectedSeatLabel(seat.label);
             return { ...seat, status: 'selected' };
           } else if (seat.status === 'selected') {
             return { ...seat, status: 'available' };
@@ -92,9 +104,7 @@ const SeatLayout: React.FC = () => {
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(e.target.value);
-    setSeats(Array(6).fill(Array(8).fill({ id: 0, label: '', x: 0, y: 0, status: 'available' })));
     setSelectedSeat(null);
-    setSelectedSeatLabel('');
   };
 
   return (
@@ -120,7 +130,7 @@ const SeatLayout: React.FC = () => {
       </div>
       <div className="mt-4 flex flex-col items-center justify-center">
         <button onClick={reserveSeat} className="bg-blue-500 text-white p-2 rounded mt-2">Reserve</button>
-        {selectedSeatLabel && <p className="mt-2 text-black">Selected Seat: {selectedSeatLabel}</p>}
+        {selectedSeat && <p className="mt-2 text-violet-600">Selected Seat: {selectedSeat.label}</p>}
       </div>
       <div className='mt-4'>
         <ul className="showcase flex justify-between bg-gray-800 p-2 rounded text-gray-400">
@@ -143,3 +153,4 @@ const SeatLayout: React.FC = () => {
 };
 
 export default SeatLayout;
+
