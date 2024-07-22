@@ -127,7 +127,12 @@ const SeatLayout: React.FC = () => {
         ))}
       </div>
       <div className="mt-4 flex flex-col items-center justify-center">
-        <button onClick={reserveSeat} className="bg-blue-500 text-white p-2 rounded mt-2" disabled={!selectedDate}>Reserve</button>
+      <button 
+          onClick={reserveSeat} 
+          className={`p-2 rounded mt-2 ${selectedDate ? 'bg-blue-500 text-white' : 'bg-gray-500 text-gray-300 cursor-not-allowed'}`} 
+          disabled={!selectedDate}>
+          Reserve
+        </button>
         {selectedSeat && <p className="mt-2 text-violet-600">Selected Seat: {selectedSeat.label}</p>}
       </div>
       <div className='mt-4'>
