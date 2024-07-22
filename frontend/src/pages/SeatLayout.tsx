@@ -113,7 +113,7 @@ const SeatLayout: React.FC = () => {
         type="date"
         value={selectedDate}
         onChange={handleDateChange}
-        className="my-4 p-2 border border-gray-300 rounded"
+        className="my-4 p-2 border border-gray-300 rounded text-black"
       />
       <div className="container flex flex-col items-center mt-10">
         {seats.map((row, rowIndex) => (
