@@ -19,8 +19,8 @@ const SeatLayout: React.FC = () => {
     const fetchSeats = async () => {
       if (selectedDate) {
         try {
-          const response = await axios.get(`http://localhost:3000/api/seats?date=${selectedDate}`,
-           { headers: { Authorization: `Bearer ${token}`},
+          const response = await axios.get(`http://localhost:3000/api/seats?date=${selectedDate}`, {
+            headers: { Authorization: `Bearer ${token}` },
           });
           console.log(response);
 
@@ -64,7 +64,7 @@ const SeatLayout: React.FC = () => {
   }, [selectedDate, token]);
 
   const handleSeatClick = (rowIndex: number, seatIndex: number) => {
-    if (seats[rowIndex][seatIndex].status !== 'available') return;
+    if (!selectedDate || seats[rowIndex][seatIndex].status !== 'available') return;
 
     setSeats(prevSeats => {
       return prevSeats.map((row, rIndex) =>
@@ -86,11 +86,7 @@ const SeatLayout: React.FC = () => {
       alert('Please select a seat to reserve.');
       return;
     }
-
     const seatId = selectedSeat.id;
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-
     try {
       await axios.post(
         'http://localhost:3000/api/reserve',
@@ -124,13 +120,14 @@ const SeatLayout: React.FC = () => {
                 key={seatIndex}
                 className={`seat h-10 w-10 m-1 rounded-t-md ${seat.status === 'available' ? 'bg-gray-600' : seat.status === 'selected' ? 'bg-blue-600' : 'bg-white cursor-not-allowed'}`}
                 onClick={() => handleSeatClick(rowIndex, seatIndex)}
+                style={{ cursor: selectedDate ? 'pointer' : 'not-allowed' }} // Disable cursor if no date is selected
               ></div>
             ))}
           </div>
         ))}
       </div>
       <div className="mt-4 flex flex-col items-center justify-center">
-        <button onClick={reserveSeat} className="bg-blue-500 text-white p-2 rounded mt-2">Reserve</button>
+        <button onClick={reserveSeat} className="bg-blue-500 text-white p-2 rounded mt-2" disabled={!selectedDate}>Reserve</button>
         {selectedSeat && <p className="mt-2 text-violet-600">Selected Seat: {selectedSeat.label}</p>}
       </div>
       <div className='mt-4'>
@@ -154,4 +151,3 @@ const SeatLayout: React.FC = () => {
 };
 
 export default SeatLayout;
-
