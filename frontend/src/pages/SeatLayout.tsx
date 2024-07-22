@@ -19,9 +19,10 @@ const SeatLayout: React.FC = () => {
     const fetchSeats = async () => {
       if (selectedDate) {
         try {
-          const response = await axios.get(`/api/seats?date=${selectedDate}`, {
-            headers: { Authorization: `Bearer ${token}` },
+          const response = await axios.get(`http://localhost:3000/api/seats?date=${selectedDate}`,
+           { headers: { Authorization: `Bearer ${token}`},
           });
+          console.log(response);
 
           const seats: Seat[] = response.data;
 
