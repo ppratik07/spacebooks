@@ -6,7 +6,7 @@ import authMiddleware from "./middlewares/auth";
 import { resetpassword } from "./zod/ResetPassword";
 import { dateSchema } from "./zod/DateSchema";
 import { reserveSchema } from "./zod/reserveSchema";
-import { UserPayload } from './models/UserPayload';
+import { UserPayload } from "./models/UserPayload";
 const cors = require("cors");
 const app = express();
 const PORT = 3000;
@@ -155,11 +155,11 @@ app.get("/seat-layout", authMiddleware, async (req, res) => {
   }
 });
 
-app.get('/api/seats', async (req, res) => {
+app.get("/api/seats", async (req, res) => {
   const selectedDate = req.query.date as string;
   console.log(selectedDate);
   if (!selectedDate) {
-    return res.status(400).json({ error: 'Date parameter is required' });
+    return res.status(400).json({ error: "Date parameter is required" });
   }
 
   try {
@@ -176,69 +176,62 @@ app.get('/api/seats', async (req, res) => {
     const seats = await prisma.seat.findMany();
 
     const seatStatus = seats.map((seat) => {
-      const reserved = reservations.find((reservation) => reservation.seatId === seat.id);
+      const reserved = reservations.find(
+        (reservation) => reservation.seatId === seat.id
+      );
       return {
         id: seat.id,
         label: seat.label,
         x: seat.x,
         y: seat.y,
-        status: reserved ? 'reserved' : 'available',
+        status: reserved ? "reserved" : "available",
       };
     });
 
     res.status(200).json(seatStatus);
   } catch (error) {
-    console.error('Error fetching seats', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching seats", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-
 app.post("/api/reserve", async (req, res) => {
+  const { seatId, date } = req.body;
+  const userId = 1; // Assuming you have the userId from your context
+
+  console.log("Received reservation request:", { seatId, date });
+  console.log("Extracted user ID:", userId);
+
+  const seatExists = await prisma.seat.findUnique({
+    where: {
+      id: seatId,
+    },
+  });
+
+  if (!seatExists) {
+    console.log("Invalid seatId. Seat does not exist.");
+    return res
+      .status(400)
+      .json({ error: "Invalid seatId. Seat does not exist." });    
+  }
+
+  const dateObj = new Date(date);
+  const ISODateFormatted = dateObj.toISOString();
+
   try {
-    // const user = (req as unknown as Request & { user: UserPayload }).user; 
-    // console.log(user);
-    // if (!user) {
-    //   return res.status(401).send({ error: 'User not authenticated' });
-    // }
-
-    const userId = 1; 
-    const { seatId, date } = req.body;
-    console.log('Received reservation request:', { seatId, date });
-    console.log('Extracted user ID:', userId);
-
-    // Check if the user exists in the database
-    // const existingUser = await prisma.user.findUnique({
-    //   where: { id: userId }
-    // });
-
-    // if (!existingUser) {
-    //   return res.status(400).send({ error: 'Invalid user ID' });
-    // }
-
-    // const newReservations = [];
-    const ISODateFormatted = new Date().toISOString();
-    // for (const id of seatId) {
-    //   const newReservation = await prisma.reservation.create({
-    //     data: {
-    //       userId,
-    //       seatId: id,
-    //       date: ISODateFormatted
-    //     }
-    //   });
-    //   newReservations.push(newReservation);
-    // }
     const newReservation = await prisma.reservation.create({
-      data:{
-        userId : userId,
-        seatId : seatId,
-        date : ISODateFormatted
-      }
-    })
-    res.status(200).send({ message: 'Seats reserved successfully', newReservation });
+      data: {
+        userId: userId,
+        seatId: seatId,
+        date: ISODateFormatted,
+      },
+    });
+    res
+      .status(200)
+      .send({ message: "Seats reserved successfully", newReservation });
   } catch (error) {
-    console.error('Error reserving seats', error);
-    res.status(500).send({ error: 'Error reserving seats' });
+    console.error("Error reserving seats", error);
+    res.status(500).send({ error: "Error reserving seats" });
   }
 });
 
