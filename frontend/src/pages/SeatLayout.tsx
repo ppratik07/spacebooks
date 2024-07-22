@@ -93,7 +93,7 @@ const SeatLayout: React.FC = () => {
     try {
       await axios.post(
         'http://localhost:3000/api/reserve',
-        { seatId, date: formattedDate },
+        { seatId, date: selectedDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log('Seat reserved successfully');
