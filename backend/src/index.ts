@@ -229,6 +229,7 @@ app.post("/api/reserve", async (req, res) => {
     res
       .status(200)
       .send({ message: "Seats reserved successfully", newReservation });
+      alert(`Seat reserverved successfull for ${date}`)
   } catch (error) {
     console.error("Error reserving seats", error);
     res.status(500).send({ error: "Error reserving seats" });
