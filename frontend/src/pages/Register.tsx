@@ -40,7 +40,7 @@ export const Register = () => {
                             name
                         });
                         localStorage.setItem('token', response.data.token);
-                    }} type={"submit"} label={"Submit"} />
+                    }} type={"submit"} label={"Register"} />
                 </div>
                 <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/login"} />
             </div>
