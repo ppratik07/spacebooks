@@ -94,6 +94,7 @@ const SeatLayout: React.FC = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log('Seat reserved successfully');
+      alert("Seat reserved successfully.Kindly refresh the page to validate");
     } catch (error) {
       console.error('Error reserving seat', error);
     }
@@ -118,7 +119,7 @@ const SeatLayout: React.FC = () => {
             {row.map((seat, seatIndex) => (
               <div
                 key={seatIndex}
-                className={`seat h-10 w-10 m-1 rounded-t-md ${seat.status === 'available' ? 'bg-gray-600' : seat.status === 'selected' ? 'bg-blue-600' : 'bg-white cursor-not-allowed'}`}
+                className={`seat h-10 w-10 m-1 rounded-t-md ${seat.status === 'available' ? 'bg-gray-600' : seat.status === 'selected' ? 'bg-blue-600' : 'bg-red-500 cursor-not-allowed'}`}
                 onClick={() => handleSeatClick(rowIndex, seatIndex)}
                 style={{ cursor: selectedDate ? 'pointer' : 'not-allowed' }} // Disable cursor if no date is selected
               ></div>
@@ -146,7 +147,7 @@ const SeatLayout: React.FC = () => {
             <small className="ml-1">Selected</small>
           </li>
           <li className="flex items-center mx-2">
-            <div className="seat bg-white h-3 w-4 rounded-t-md"></div>
+            <div className="seat bg-red-500 h-3 w-4 rounded-t-md"></div>
             <small className="ml-1">Occupied</small>
           </li>
         </ul>
