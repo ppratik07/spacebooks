@@ -43,7 +43,7 @@ export const Login = () => {
                     </div>
 
                     <div className="py-2">
-                           <Button onClick={handleSubmit} label={"Submit"}></Button>
+                           <Button onClick={handleSubmit} label={"Login"}></Button>
                     </div>
             </div>
             <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/register"} />
