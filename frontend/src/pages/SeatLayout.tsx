@@ -53,7 +53,6 @@ const SeatLayout: React.FC = () => {
                     console.error('Error fetching seats', error);
                 }
             } else {
-                // Initialize with mock data for testing
                 const mockSeats: Seat[][] = [];
                 for (let i = 0; i < 6; i++) {
                     const row: Seat[] = [];
@@ -134,7 +133,7 @@ const SeatLayout: React.FC = () => {
                                 key={seatIndex}
                                 className={`seat h-10 w-10 m-1 rounded-t-md ${seat.status === 'available' ? 'bg-gray-600' : seat.status === 'selected' ? 'bg-blue-600' : 'bg-red-500 cursor-not-allowed'}`}
                                 onClick={() => handleSeatClick(rowIndex, seatIndex)}
-                                style={{ cursor: selectedDate ? 'pointer' : 'not-allowed' }} // Disable cursor if no date is selected
+                                style={{ cursor: selectedDate ? 'pointer' : 'not-allowed' }} // Disabling cursor if no date is selected
                             ></div>
                         ))}
                     </div>
