@@ -23,7 +23,9 @@ export const Login = () => {
         // Todo: Create a type for the response that you get back from the server
         const data = await response.json();
         if (data.token) {
-            localStorage.setItem("token", data.token)
+            const token_expiration = Date.now() + 5 * 60 * 1000;
+            localStorage.setItem("token", data.token);
+            localStorage.setItem('token_expiration', token_expiration.toString());
             window.location = "/seatlayout";
         } else {
             alert("invalid credentials");
