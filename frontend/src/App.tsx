@@ -5,15 +5,6 @@ import { ResetPassword } from './pages/ResetPassword';
 import SeatLayout from './pages/SeatLayout';
 import { Navbar } from './pages/NavigationBar';
 function App() {
-    // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    // const [user, setUser] = useState<{ id: string; name: string } | null>(null);
-
-    // const handleSignIn = (token: string, user: { id: string; name: string }) => {
-
-    //     localStorage.setItem('authToken', token);
-    //     setUser(user);
-    //     setIsAuthenticated(true);
-    // };
 
     return (
         <div>
@@ -26,7 +17,6 @@ function App() {
                     <Route path='/seatlayout' element={<SeatLayout/>} />
                 </Routes>
             </BrowserRouter>
-            {/* {isAuthenticated && <div>Welcome, {user?.name}!</div>} */}
         </div>
     );
 }
