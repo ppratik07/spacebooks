@@ -26,6 +26,8 @@ export const Login = () => {
             const token_expiration = Date.now() + 5 * 60 * 1000;
             localStorage.setItem("token", data.token);
             localStorage.setItem('token_expiration', token_expiration.toString());
+            localStorage.setItem('timeLeft', '300');
+            localStorage.setItem('timestamp', Date.now().toString());
             window.location = "/seatlayout";
         } else {
             alert("invalid credentials");
