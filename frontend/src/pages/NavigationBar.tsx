@@ -5,16 +5,36 @@ import { useNavigate } from 'react-router-dom';
 export const Navbar: React.FC = () => {
     const navigate = useNavigate();
     const SESSION_DURATION = 300; // 5 minutes in seconds
-    const [timeLeft, setTimeLeft] = useState<number>(() => {
+
+    const getTimeLeft = () => {
         const savedTime = localStorage.getItem('timeLeft');
-        return savedTime ? parseInt(savedTime, 10) : SESSION_DURATION;
-    });
+        const savedTimestamp = localStorage.getItem('timestamp');
+
+        if (savedTime && savedTimestamp) {
+            const elapsed = Math.floor((Date.now() - parseInt(savedTimestamp, 10)) / 1000);
+            const newTimeLeft = parseInt(savedTime, 10) - elapsed;
+            return newTimeLeft > 0 ? newTimeLeft : 0;
+        }
+
+        return SESSION_DURATION;
+    };
+
+    const [timeLeft, setTimeLeft] = useState<number>(getTimeLeft);
+
+    const resetTimer = () => {
+        localStorage.setItem('timeLeft', SESSION_DURATION.toString());
+        localStorage.setItem('timestamp', Date.now().toString());
+        setTimeLeft(SESSION_DURATION);
+    };
 
     useEffect(() => {
         const intervalId = setInterval(() => {
             setTimeLeft(prevTime => {
                 const newTime = prevTime - 1;
-                localStorage.setItem('timeLeft', newTime.toString());
+                if (newTime >= 0) {
+                    localStorage.setItem('timeLeft', newTime.toString());
+                    localStorage.setItem('timestamp', Date.now().toString());
+                }
                 return newTime;
             });
         }, 1000);
@@ -26,10 +46,11 @@ export const Navbar: React.FC = () => {
         if (timeLeft <= 0) {
             alert('Session expired. Please log in again.');
             localStorage.removeItem('timeLeft');
+            localStorage.removeItem('timestamp');
             navigate('/login');
         }
     }, [timeLeft, navigate]);
-    const formatTime = (seconds: number) => {
+    const formatTime = (seconds: number): string => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
