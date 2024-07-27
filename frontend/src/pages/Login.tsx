@@ -20,7 +20,7 @@ export const Login = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
         });
-        // Todo: Create a type for the response that you get back from the server
+    
         const data = await response.json();
         if (data.token) {
             const token_expiration = Date.now() + 5 * 60 * 1000;
