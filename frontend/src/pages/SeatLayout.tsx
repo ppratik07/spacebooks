@@ -116,13 +116,20 @@ const SeatLayout: React.FC = () => {
         setSelectedDate(e.target.value);
         setSelectedSeat(null);
     };
-
+    const getTodayDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed in JS
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
     return (
         <div className="movie-container flex flex-col items-center justify-center text-white">
             <input
                 type="date"
                 value={selectedDate}
                 onChange={handleDateChange}
+                min={getTodayDate()}
                 className="my-4 p-2 border border-gray-300 rounded text-black"
             />
             <div className="container flex flex-col items-center mt-10">
