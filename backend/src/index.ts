@@ -74,7 +74,7 @@ app.post("/signin", async (req, res) => {
   });
 });
 
-app.get("/reset-password", async (req, res) => {
+app.get("/resetpassword", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
   const user = await prisma.user.findUnique({
     where: { username: req.body.username },
@@ -197,7 +197,7 @@ app.get("/api/seats", async (req, res) => {
 
 app.post("/api/reserve", async (req, res) => {
   const { seatId, date } = req.body;
-  const userId = 1; // Assuming you have the userId from your context
+  const userId = 1; // take the userId from your context| currently harcoded
 
   console.log("Received reservation request:", { seatId, date });
   console.log("Extracted user ID:", userId);
