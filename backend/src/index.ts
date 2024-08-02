@@ -234,6 +234,10 @@ app.post("/api/reserve", async (req, res) => {
   }
 });
 
+app.post('/reset-password-form',(req,res)=>{
+  
+})
+
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
 });
