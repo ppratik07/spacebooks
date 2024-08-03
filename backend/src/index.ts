@@ -5,6 +5,7 @@ import { signin } from "./zod/Signin";
 import authMiddleware from "./middlewares/auth";
 import { resetpassword } from "./zod/ResetPassword";
 import { dateSchema } from "./zod/DateSchema";
+import crypto from 'crypto';
 import { reserveSchema } from "./zod/reserveSchema";
 import { UserPayload } from "./models/UserPayload";
 const cors = require("cors");
@@ -74,8 +75,9 @@ app.post("/signin", async (req, res) => {
   });
 });
 
-app.get("/resetpassword", async (req, res) => {
+app.get("/reset-password-reset", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
+  const { email } = req.body;
   const user = await prisma.user.findUnique({
     where: { username: req.body.username },
   });
@@ -83,11 +85,18 @@ app.get("/resetpassword", async (req, res) => {
     return res.status(400).send("User not found");
   }
   //send email
+  const token = crypto.randomBytes(32).toString('hex');
+  const expiry = Date.now() + 3600000;//Token valid for 1 hour
+
   if (!success) {
     res.status(411).json({
       message: "Please check the correct inputs",
     });
   }
+//   await prisma.user.update({
+//     where: { email },
+//     data: { resetToken: token, resetTokenExpiry: expiry },
+// });
   try {
     const resetToken = jwt.sign(
       { userId: user.id },
@@ -234,9 +243,6 @@ app.post("/api/reserve", async (req, res) => {
   }
 });
 
-app.post('/reset-password-form',(req,res)=>{
-  
-})
 
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
