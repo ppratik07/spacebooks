@@ -93,10 +93,10 @@ app.get("/reset-password-reset", async (req, res) => {
       message: "Please check the correct inputs",
     });
   }
-//   await prisma.user.update({
-//     where: { email },
-//     data: { resetToken: token, resetTokenExpiry: expiry },
-// });
+  await prisma.user.update({
+    where: { email },
+    data: { resetToken: token, resetTokenExpiry: expiry },
+});
   try {
     const resetToken = jwt.sign(
       { userId: user.id },
