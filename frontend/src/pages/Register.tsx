@@ -5,12 +5,14 @@ import { SubHeading } from "../components/SubHeading"
 import { Button } from "../components/Button"
 import axios from "axios"
 import { BottomWarning } from "../components/Warning"
+import { useNavigate } from "react-router-dom"
 
 export const Register = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [name, setName] = useState<string>("");
-
+    const [MobileNumber, setMobileNumber] = useState<string>("");
+    const navigate = useNavigate();
     return <div>
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -32,6 +34,11 @@ export const Register = () => {
                         setName(e.target.value);
                     }} />
                 </div>
+                <div>
+                    <InputBox label={"Mobile Number"} id={"mobilenumber"} type={"number"} value={MobileNumber} onChange={(e) => {
+                        setMobileNumber(e.target.value);
+                    }} />
+                </div>
                 <div className="py-2">
                     <Button onClick={async () => {
                         const response = await axios.post("http://localhost:3000/signup", {
@@ -40,7 +47,14 @@ export const Register = () => {
                             name
                         });
                         localStorage.setItem('token', response.data.token);
+                        if(response.status == 200){
+                            alert("User created successfully.Please click Ok to login");
+                            navigate('/login')
+                        }else{
+                            alert('An error occurred. Please try again.');
+                        }
                     }} type={"submit"} label={"Register"} />
+
                 </div>
                 <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/login"} />
             </div>
