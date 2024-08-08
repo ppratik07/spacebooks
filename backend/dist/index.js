@@ -18,6 +18,7 @@ const Register_1 = require("./zod/Register");
 const auth_1 = __importDefault(require("./middlewares/auth"));
 const ResetPassword_1 = require("./zod/ResetPassword");
 const DateSchema_1 = require("./zod/DateSchema");
+const crypto_1 = __importDefault(require("crypto"));
 const cors = require("cors");
 const app = (0, express_1.default)();
 const PORT = 3000;
@@ -82,8 +83,9 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         token,
     });
 }));
-app.get("/reset-password", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/reset-password-reset", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { success } = ResetPassword_1.resetpassword.safeParse(req.body);
+    const { email } = req.body;
     const user = yield prisma.user.findUnique({
         where: { username: req.body.username },
     });
@@ -91,11 +93,17 @@ app.get("/reset-password", (req, res) => __awaiter(void 0, void 0, void 0, funct
         return res.status(400).send("User not found");
     }
     //send email
+    const token = crypto_1.default.randomBytes(32).toString('hex');
+    const expiry = Date.now() + 3600000; //Token valid for 1 hour
     if (!success) {
         res.status(411).json({
             message: "Please check the correct inputs",
         });
     }
+    //   await prisma.user.update({
+    //     where: { email },
+    //     data: { resetToken: token, resetTokenExpiry: expiry },
+    // });
     try {
         const resetToken = jwt.sign({ userId: user.id }, process.env.RESET_PASSWORD_SECRET, { expiresIn: "1h" });
         res.send("Password reset email sent");
@@ -190,7 +198,7 @@ app.get("/api/seats", (req, res) => __awaiter(void 0, void 0, void 0, function* 
 }));
 app.post("/api/reserve", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { seatId, date } = req.body;
-    const userId = 1; // Assuming you have the userId from your context
+    const userId = 1; // take the userId from your context| currently harcoded
     console.log("Received reservation request:", { seatId, date });
     console.log("Extracted user ID:", userId);
     const seatExists = yield prisma.seat.findUnique({

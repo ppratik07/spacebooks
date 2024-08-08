@@ -10,6 +10,8 @@ import { reserveSchema } from "./zod/reserveSchema";
 import { UserPayload } from "./models/UserPayload";
 const cors = require("cors");
 const app = express();
+import nodemailer from 'nodemailer';
+
 const PORT = 3000;
 
 app.use(cors());
@@ -18,6 +20,26 @@ app.use(express.json());
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
 
+const generateOTP = () => {
+  return crypto.randomBytes(3).toString('hex'); // Generate a 6-character OTP
+};
+
+const sendEmail = async (email: string, subject: string, html: string) => {
+  const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+          user: 'your-email@gmail.com',
+          pass: 'your-email-password',
+      },
+  });
+
+  await transporter.sendMail({
+      to: email,
+      from: 'no-reply@example.com',
+      subject: subject,
+      html: html,
+  });
+};
 //Endpoints
 app.post("/signup", async (req, res) => {
   const parsedInput = register.safeParse(req.body);
@@ -75,38 +97,10 @@ app.post("/signin", async (req, res) => {
   });
 });
 
-app.get("/reset-password-reset", async (req, res) => {
+app.get("/api/request-otp", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
   const { email } = req.body;
-  const user = await prisma.user.findUnique({
-    where: { username: req.body.username },
-  });
-  if (!user) {
-    return res.status(400).send("User not found");
-  }
-  //send email
-  const token = crypto.randomBytes(32).toString('hex');
-  const expiry = Date.now() + 3600000;//Token valid for 1 hour
-
-  if (!success) {
-    res.status(411).json({
-      message: "Please check the correct inputs",
-    });
-  }
-  await prisma.user.update({
-    where: { email },
-    data: { resetToken: token, resetTokenExpiry: expiry },
-});
-  try {
-    const resetToken = jwt.sign(
-      { userId: user.id },
-      process.env.RESET_PASSWORD_SECRET as string,
-      { expiresIn: "1h" }
-    );
-    res.send("Password reset email sent");
-  } catch (error) {
-    res.status(500).send("Error sending password reset email");
-  }
+  
 });
 
 app.post("/reset-password/:token", async (req, res) => {
