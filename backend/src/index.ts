@@ -100,7 +100,26 @@ app.post("/signin", async (req, res) => {
 app.get("/api/request-otp", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
   const { email } = req.body;
-  
+  try {
+    const otp = generateOTP();
+    const otpExpiresAt = new Date(Date.now() + 3600000); // OTP valid for 1 hour
+
+    await prisma.user.update({
+        where: email,
+        data: {
+            otp,
+            otpExpiresAt,
+        },
+    });
+
+    const html = `<p>Your OTP for password reset is: <strong>${otp}</strong></p>`;
+    await sendEmail(email, 'Password Reset OTP', html);
+
+    res.status(200).send('OTP sent to email');
+} catch (error) {
+    console.error('Error sending OTP email', error);
+    res.status(500).send('Error sending OTP email');
+}
 });
 
 app.post("/reset-password/:token", async (req, res) => {
