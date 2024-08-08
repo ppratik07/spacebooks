@@ -21,11 +21,30 @@ const DateSchema_1 = require("./zod/DateSchema");
 const crypto_1 = __importDefault(require("crypto"));
 const cors = require("cors");
 const app = (0, express_1.default)();
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const PORT = 3000;
 app.use(cors());
 app.use(express_1.default.json());
 const jwt = require("jsonwebtoken");
 const prisma = new client_1.PrismaClient();
+const generateOTP = () => {
+    return crypto_1.default.randomBytes(3).toString('hex'); // Generate a 6-character OTP
+};
+const sendEmail = (email, subject, html) => __awaiter(void 0, void 0, void 0, function* () {
+    const transporter = nodemailer_1.default.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'your-email@gmail.com',
+            pass: 'your-email-password',
+        },
+    });
+    yield transporter.sendMail({
+        to: email,
+        from: 'no-reply@example.com',
+        subject: subject,
+        html: html,
+    });
+});
 //Endpoints
 app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -83,33 +102,26 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         token,
     });
 }));
-app.get("/reset-password-reset", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/api/request-otp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { success } = ResetPassword_1.resetpassword.safeParse(req.body);
     const { email } = req.body;
-    const user = yield prisma.user.findUnique({
-        where: { username: req.body.username },
-    });
-    if (!user) {
-        return res.status(400).send("User not found");
-    }
-    //send email
-    const token = crypto_1.default.randomBytes(32).toString('hex');
-    const expiry = Date.now() + 3600000; //Token valid for 1 hour
-    if (!success) {
-        res.status(411).json({
-            message: "Please check the correct inputs",
-        });
-    }
-    //   await prisma.user.update({
-    //     where: { email },
-    //     data: { resetToken: token, resetTokenExpiry: expiry },
-    // });
     try {
-        const resetToken = jwt.sign({ userId: user.id }, process.env.RESET_PASSWORD_SECRET, { expiresIn: "1h" });
-        res.send("Password reset email sent");
+        const otp = generateOTP();
+        const otpExpiresAt = new Date(Date.now() + 3600000); // OTP valid for 1 hour
+        yield prisma.user.update({
+            where: email,
+            data: {
+                otp,
+                otpExpiresAt,
+            },
+        });
+        const html = `<p>Your OTP for password reset is: <strong>${otp}</strong></p>`;
+        yield sendEmail(email, 'Password Reset OTP', html);
+        res.status(200).send('OTP sent to email');
     }
     catch (error) {
-        res.status(500).send("Error sending password reset email");
+        console.error('Error sending OTP email', error);
+        res.status(500).send('Error sending OTP email');
     }
 }));
 app.post("/reset-password/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
