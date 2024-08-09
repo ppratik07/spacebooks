@@ -28,19 +28,19 @@ app.use(express_1.default.json());
 const jwt = require("jsonwebtoken");
 const prisma = new client_1.PrismaClient();
 const generateOTP = () => {
-    return crypto_1.default.randomBytes(3).toString('hex'); // Generate a 6-character OTP
+    return crypto_1.default.randomBytes(3).toString("hex"); // Generate a 6-character OTP
 };
 const sendEmail = (email, subject, html) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
-        service: 'Gmail',
+        service: "Gmail",
         auth: {
-            user: 'your-email@gmail.com',
-            pass: 'your-email-password',
+            user: "your-email@gmail.com",
+            pass: "your-email-password",
         },
     });
     yield transporter.sendMail({
         to: email,
-        from: 'no-reply@example.com',
+        from: "no-reply@example.com",
         subject: subject,
         html: html,
     });
@@ -102,26 +102,28 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         token,
     });
 }));
-app.get("/api/request-otp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/request-otp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { success } = ResetPassword_1.resetpassword.safeParse(req.body);
     const { email } = req.body;
     try {
         const otp = generateOTP();
         const otpExpiresAt = new Date(Date.now() + 3600000); // OTP valid for 1 hour
         yield prisma.user.update({
-            where: email,
+            where: {
+                username: email
+            },
             data: {
                 otp,
                 otpExpiresAt,
             },
         });
         const html = `<p>Your OTP for password reset is: <strong>${otp}</strong></p>`;
-        yield sendEmail(email, 'Password Reset OTP', html);
-        res.status(200).send('OTP sent to email');
+        yield sendEmail(email, "Password Reset OTP", html);
+        res.status(200).send("OTP sent to email");
     }
     catch (error) {
-        console.error('Error sending OTP email', error);
-        res.status(500).send('Error sending OTP email');
+        console.error("Error sending OTP email", error);
+        res.status(500).send("Error sending OTP email");
     }
 }));
 app.post("/reset-password/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

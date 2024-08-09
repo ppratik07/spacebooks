@@ -5,12 +5,12 @@ import { signin } from "./zod/Signin";
 import authMiddleware from "./middlewares/auth";
 import { resetpassword } from "./zod/ResetPassword";
 import { dateSchema } from "./zod/DateSchema";
-import crypto from 'crypto';
+import crypto from "crypto";
 import { reserveSchema } from "./zod/reserveSchema";
 import { UserPayload } from "./models/UserPayload";
 const cors = require("cors");
 const app = express();
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 const PORT = 3000;
 
@@ -21,23 +21,23 @@ const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
 
 const generateOTP = () => {
-  return crypto.randomBytes(3).toString('hex'); // Generate a 6-character OTP
+  return crypto.randomBytes(3).toString("hex"); // Generate a 6-character OTP
 };
 
 const sendEmail = async (email: string, subject: string, html: string) => {
   const transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-          user: 'your-email@gmail.com',
-          pass: 'your-email-password',
-      },
+    service: "Gmail",
+    auth: {
+      user: "your-email@gmail.com",
+      pass: "your-email-password",
+    },
   });
 
   await transporter.sendMail({
-      to: email,
-      from: 'no-reply@example.com',
-      subject: subject,
-      html: html,
+    to: email,
+    from: "no-reply@example.com",
+    subject: subject,
+    html: html,
   });
 };
 //Endpoints
@@ -97,7 +97,7 @@ app.post("/signin", async (req, res) => {
   });
 });
 
-app.get("/api/request-otp", async (req, res) => {
+app.post("/api/request-otp", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
   const { email } = req.body;
   try {
@@ -105,21 +105,23 @@ app.get("/api/request-otp", async (req, res) => {
     const otpExpiresAt = new Date(Date.now() + 3600000); // OTP valid for 1 hour
 
     await prisma.user.update({
-        where: email,
-        data: {
-            otp,
-            otpExpiresAt,
-        },
+      where: {
+        username : email
+      },
+      data: {
+        otp,
+        otpExpiresAt,
+      },
     });
 
     const html = `<p>Your OTP for password reset is: <strong>${otp}</strong></p>`;
-    await sendEmail(email, 'Password Reset OTP', html);
+    await sendEmail(email, "Password Reset OTP", html);
 
-    res.status(200).send('OTP sent to email');
-} catch (error) {
-    console.error('Error sending OTP email', error);
-    res.status(500).send('Error sending OTP email');
-}
+    res.status(200).send("OTP sent to email");
+  } catch (error) {
+    console.error("Error sending OTP email", error);
+    res.status(500).send("Error sending OTP email");
+  }
 });
 
 app.post("/reset-password/:token", async (req, res) => {
@@ -234,7 +236,7 @@ app.post("/api/reserve", async (req, res) => {
     console.log("Invalid seatId. Seat does not exist.");
     return res
       .status(400)
-      .json({ error: "Invalid seatId. Seat does not exist." });    
+      .json({ error: "Invalid seatId. Seat does not exist." });
   }
   const dateObj = new Date(date);
   const ISODateFormatted = dateObj.toISOString();
@@ -255,7 +257,6 @@ app.post("/api/reserve", async (req, res) => {
     res.status(500).send({ error: "Error reserving seats" });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
