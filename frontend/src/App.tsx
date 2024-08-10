@@ -4,10 +4,11 @@ import { Register } from './pages/Register';
 import { ResetPassword } from './pages/ResetPassword';
 import SeatLayout from './pages/SeatLayout';
 import { Navbar } from './pages/NavigationBar';
+import RequestOtp from './pages/RequestOtp';
 
 function AppContent() {
     const location = useLocation();
-    const excludeNavbarPaths = ['/login', '/register', '/resetpassword'];
+    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp'];
 
     return (
         <>
@@ -17,6 +18,7 @@ function AppContent() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/resetpassword" element={<ResetPassword />} />
                 <Route path="/seatlayout" element={<SeatLayout />} />
+                <Route path="/request-otp" element={<RequestOtp />} />
             </Routes>
         </>
     );
