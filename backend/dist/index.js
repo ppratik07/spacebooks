@@ -34,8 +34,8 @@ const sendEmail = (email, subject, html) => __awaiter(void 0, void 0, void 0, fu
     const transporter = nodemailer_1.default.createTransport({
         service: "Gmail",
         auth: {
-            user: "your-email@gmail.com",
-            pass: "your-email-password",
+            user: process.env.USERNAME,
+            pass: process.env.PASSWORD,
         },
     });
     yield transporter.sendMail({
@@ -104,9 +104,11 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 }));
 app.post("/api/request-otp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { success } = ResetPassword_1.resetpassword.safeParse(req.body);
-    const { email } = req.body;
+    const { email } = req.body.email;
+    console.log(req.body.email);
     try {
         const otp = generateOTP();
+        console.log(otp);
         const otpExpiresAt = new Date(Date.now() + 3600000); // OTP valid for 1 hour
         yield prisma.user.update({
             where: {
