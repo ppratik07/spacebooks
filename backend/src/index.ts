@@ -99,16 +99,14 @@ app.post("/signin", async (req, res) => {
 
 app.post("/api/request-otp", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
-  const { email } = req.body.email;
-  console.log(req.body.email);
+  const { email } = req.body;
   try {
     const otp = generateOTP();
-    console.log(otp);
     const otpExpiresAt = new Date(Date.now() + 3600000); // OTP valid for 1 hour
 
     await prisma.user.update({
       where: {
-        username : email
+        username: email,
       },
       data: {
         otp,
