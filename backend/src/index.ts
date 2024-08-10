@@ -28,8 +28,8 @@ const sendEmail = async (email: string, subject: string, html: string) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      user: "your-email@gmail.com",
-      pass: "your-email-password",
+      user: process.env.USERNAME,
+      pass: process.env.PASSWORD,
     },
   });
 
@@ -99,9 +99,11 @@ app.post("/signin", async (req, res) => {
 
 app.post("/api/request-otp", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
-  const { email } = req.body;
+  const { email } = req.body.email;
+  console.log(req.body.email);
   try {
     const otp = generateOTP();
+    console.log(otp);
     const otpExpiresAt = new Date(Date.now() + 3600000); // OTP valid for 1 hour
 
     await prisma.user.update({
