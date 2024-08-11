@@ -126,6 +126,7 @@ app.post("/api/request-otp", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(500).send("Error sending OTP email");
     }
 }));
+//Not in use
 app.post("/reset-password/:token", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { token } = req.params;
     const { newPassword } = req.body;
@@ -139,6 +140,36 @@ app.post("/reset-password/:token", (req, res) => __awaiter(void 0, void 0, void 
     }
     catch (error) {
         res.status(500).send("Error resetting password");
+    }
+}));
+app.post("/reset-password", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, otp, newPassword } = req.body;
+    try {
+        const user = yield prisma.user.findFirst({
+            where: {
+                username: email,
+                otp,
+                otpExpiresAt: {
+                    gt: new Date(),
+                },
+            },
+        });
+        if (!user) {
+            res.status(400).send("Invalid or expired OTP");
+        }
+        yield prisma.user.update({
+            where: { id: user === null || user === void 0 ? void 0 : user.id },
+            data: {
+                password: newPassword,
+                otp: null,
+                otpExpiresAt: null
+            },
+        });
+        res.status(200).send("Password reset successfully !");
+    }
+    catch (err) {
+        console.log("Error resetting the password", err);
+        res.status(500).send('Error resetting the password');
     }
 }));
 app.get("/profile", auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
