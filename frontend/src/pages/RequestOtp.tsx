@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import InputBox from '../components/InputBox';
 import { Heading } from '../components/Heading';
+import { useNavigate } from 'react-router-dom';
 
 const RequestOtp = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
+    const navigate = useNavigate();
     const handleRequestOtp = async (e: any) => {
         e.preventDefault();
         try {
             await axios.post('http://localhost:3000/api/request-otp', { email });
             setMessage('OTP sent to your email');
             alert("OTP has been sent to registered email address!")
+            navigate('/reset-password');
         } catch (error) {
             setMessage('Error sending OTP');
             alert("Can't send OTP due to some internal Issue.Please try again later");
