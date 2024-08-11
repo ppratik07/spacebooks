@@ -52,7 +52,7 @@ export const Login = () => {
             </div>
             <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/register"} />
             <div>
-            <BottomWarning label={"Forgot your account?"} buttonText={"Reset Password"} to={"/resetpassword"} />
+            <BottomWarning label={"Forgot your account?"} buttonText={"Reset Password"} to={"/request-otp"} />
             </div>
         </div>
     </div>
