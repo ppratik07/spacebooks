@@ -8,7 +8,7 @@ import RequestOtp from './pages/RequestOtp';
 
 function AppContent() {
     const location = useLocation();
-    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp'];
+    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password'];
 
     return (
         <>
@@ -19,6 +19,7 @@ function AppContent() {
                 <Route path="/resetpassword" element={<ResetPassword />} />
                 <Route path="/seatlayout" element={<SeatLayout />} />
                 <Route path="/request-otp" element={<RequestOtp />} />
+                <Route path='/reset-password' element={<ResetPassword/>}/>
             </Routes>
         </>
     );
