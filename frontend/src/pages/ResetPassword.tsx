@@ -3,12 +3,14 @@ import { Heading } from "../components/Heading";
 import InputBox from "../components/InputBox";
 import { Button } from "../components/Button";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { BottomWarning } from "../components/Warning";
 
 export const ResetPassword = () => {
     const [email, setEmail] = useState<string>('');
     const [otp, setOtp] = useState<string>('');
     const [newpassword, setnewPassword] = useState<string>('');
-
+    const navigate = useNavigate();
     const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
     }
@@ -19,7 +21,7 @@ export const ResetPassword = () => {
         setnewPassword(e.target.value);
     }
 
-    const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/reset-password', {
@@ -30,6 +32,7 @@ export const ResetPassword = () => {
             console.log(response);
             if (response.status == 200) {
                 alert("Password Changed Successfully !");
+                navigate('/login');
             }
         } catch (error) {
             alert("Internal Server Occured! Please try again later");
@@ -53,6 +56,9 @@ export const ResetPassword = () => {
                 <div className="py-2">
                     <Button onClick={handleSubmit} type={"button"} label={"Submit"}></Button>
                 </div>
+                <div>
+                <BottomWarning label={"Back to Login?"} buttonText={"Login"} to={"/login"} />
+            </div>
             </div>
         </div>
     );
