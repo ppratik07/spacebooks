@@ -51,7 +51,7 @@ export const ResetPassword = () => {
                     <InputBox label={"Password"} id={"password"} type={"password"} value={newpassword} onChange={handlePasswordChange} />
                 </div>
                 <div className="py-2">
-                    <Button onClick={handleSubmit} type={"button"} label={"Login"}></Button>
+                    <Button onClick={handleSubmit} type={"button"} label={"Submit"}></Button>
                 </div>
             </div>
         </div>
