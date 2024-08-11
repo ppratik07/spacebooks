@@ -13,7 +13,7 @@ export const Login = () => {
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         e.preventDefault();
         const response = await fetch('http://localhost:3000/signin', {
             method: 'POST',
@@ -47,7 +47,7 @@ export const Login = () => {
                     </div>
 
                     <div className="py-2">
-                           <Button onClick={handleSubmit} label={"Login"}></Button>
+                           <Button onClick={handleSubmit} type="button" label={"Login"}></Button>
                     </div>
             </div>
             <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/register"} />
