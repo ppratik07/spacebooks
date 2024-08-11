@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Button } from '../components/Button';
 import InputBox from '../components/InputBox';
 import { Heading } from '../components/Heading';
 
@@ -13,8 +12,10 @@ const RequestOtp = () => {
         try {
             await axios.post('http://localhost:3000/api/request-otp', { email });
             setMessage('OTP sent to your email');
+            alert("OTP has been sent to registered email address!")
         } catch (error) {
             setMessage('Error sending OTP');
+            alert("Can't send OTP due to some internal Issue.Please try again later");
         }
     };
 
