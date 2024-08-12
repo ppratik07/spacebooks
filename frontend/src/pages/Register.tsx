@@ -6,12 +6,14 @@ import { Button } from "../components/Button"
 import axios from "axios"
 import { BottomWarning } from "../components/Warning"
 import { useNavigate } from "react-router-dom"
+import { ClipLoader } from "react-spinners"
 
 export const Register = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [name, setName] = useState<string>("");
     const [MobileNumber, setMobileNumber] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     return <div>
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -41,22 +43,33 @@ export const Register = () => {
                 </div>
                 <div className="py-2">
                     <Button onClick={async () => {
-                        const response = await axios.post("http://localhost:3000/signup", {
-                            username,
-                            password,
-                            name
-                        });
-                        localStorage.setItem('token', response.data.token);
-                        if(response.status == 200){
-                            alert("User created successfully.Please click Ok to login");
-                            navigate('/login')
-                        }else{
-                            alert('An error occurred. Please try again.');
+                        setLoading(true);
+                        try {
+                            const response = await axios.post("http://localhost:3000/signup", {
+                                username,
+                                password,
+                                name
+                            });
+                            localStorage.setItem('token', response.data.token);
+                            if (response.status == 200) {
+                                alert("User created successfully.Please click Ok to login");
+                                navigate('/login')
+                            } else {
+                                alert('An error occurred. Please try again.');
+                            }
+                        } catch (error) {
+                            alert('An internal server occurred. Please try again later!')
+                        } finally {
+                            setLoading(false);
                         }
-                    }} type={"submit"} label={"Register"} />
+
+                    }} type={"submit"} label={loading ? "Registering..." : "Register"} />
 
                 </div>
                 <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/login"} />
+            </div>
+            <div>
+                {loading && <ClipLoader color={"#000000"} loading={loading} size={50} />}
             </div>
         </div>
     </div>
