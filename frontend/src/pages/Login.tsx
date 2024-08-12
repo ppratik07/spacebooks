@@ -3,9 +3,11 @@ import { Heading } from "../components/Heading"
 import InputBox from "../components/InputBox";
 import { BottomWarning } from "../components/Warning";
 import { Button } from "../components/Button";
+import { ClipLoader } from "react-spinners";
 export const Login = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
     };
@@ -16,6 +18,7 @@ export const Login = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
         try {
             e.preventDefault();
+            setLoading(true);
             const response = await fetch('http://localhost:3000/signin', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -35,6 +38,9 @@ export const Login = () => {
             }
         } catch (error) {
             alert("Internal Error occured. Please try again later!");
+        }
+        finally {
+            setLoading(false);
         }
 
     }
@@ -58,6 +64,9 @@ export const Login = () => {
             <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/register"} />
             <div>
                 <BottomWarning label={"Forgot your account?"} buttonText={"Reset Password"} to={"/request-otp"} />
+            </div>
+            <div className="py-2 flex justify-center">
+                {loading && <ClipLoader color={"#000000"} loading={loading} size={50} />}
             </div>
         </div>
     </div>
