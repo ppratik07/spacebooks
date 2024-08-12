@@ -3,14 +3,17 @@ import axios from 'axios';
 import InputBox from '../components/InputBox';
 import { Heading } from '../components/Heading';
 import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
 
 const RequestOtp = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
     const handleRequestOtp = async (e: any) => {
         e.preventDefault();
+        setLoading(true);
         try {
             await axios.post('http://localhost:3000/api/request-otp', { email });
             setMessage('OTP sent to your email');
@@ -19,6 +22,9 @@ const RequestOtp = () => {
         } catch (error) {
             setMessage('Error sending OTP');
             alert("Can't send OTP due to some internal Issue.Please try again later");
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -38,6 +44,9 @@ const RequestOtp = () => {
      hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
       focus-visible:outline-indigo-600">Send OTP</button>
                     </div>
+                </div>
+                <div className='py-2 flex justify-center'>
+                    {loading && <ClipLoader color={"#000000"} loading={loading} size={50} />}
                 </div>
             </div>
         </form>
