@@ -68,7 +68,7 @@ export const Register = () => {
                 </div>
                 <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/login"} />
             </div>
-            <div>
+            <div className="py-2 flex justify-center">
                 {loading && <ClipLoader color={"#000000"} loading={loading} size={50} />}
             </div>
         </div>
