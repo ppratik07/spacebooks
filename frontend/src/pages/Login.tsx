@@ -60,14 +60,15 @@ export const Login = () => {
                 <div className="py-2">
                     <Button onClick={handleSubmit} type="button" label={"Login"}></Button>
                 </div>
+                <div className="py-2 flex justify-center">
+                    {loading && <ClipLoader color={"#000000"} loading={loading} size={50} />}
+                </div>
             </div>
             <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/register"} />
             <div>
                 <BottomWarning label={"Forgot your account?"} buttonText={"Reset Password"} to={"/request-otp"} />
             </div>
-            <div className="py-2 flex justify-center">
-                {loading && <ClipLoader color={"#000000"} loading={loading} size={50} />}
-            </div>
+
         </div>
     </div>
 }
