@@ -14,24 +14,29 @@ export const Login = () => {
         setPassword(e.target.value);
     };
     const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
-        e.preventDefault();
-        const response = await fetch('http://localhost:3000/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-    
-        const data = await response.json();
-        if (data.token) {
-            const token_expiration = Date.now() + 5 * 60 * 1000;
-            localStorage.setItem("token", data.token);
-            localStorage.setItem('token_expiration', token_expiration.toString());
-            localStorage.setItem('timeLeft', '300');
-            localStorage.setItem('timestamp', Date.now().toString());
-            window.location = "/seatlayout";
-        } else {
-            alert("invalid credentials");
+        try {
+            e.preventDefault();
+            const response = await fetch('http://localhost:3000/signin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+            if (data.token) {
+                const token_expiration = Date.now() + 5 * 60 * 1000;
+                localStorage.setItem("token", data.token);
+                localStorage.setItem('token_expiration', token_expiration.toString());
+                localStorage.setItem('timeLeft', '300');
+                localStorage.setItem('timestamp', Date.now().toString());
+                window.location = "/seatlayout";
+            } else {
+                alert("invalid credentials");
+            }
+        } catch (error) {
+            alert("Internal Error occured. Please try again later!");
         }
+
     }
     return <div>
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -39,20 +44,20 @@ export const Login = () => {
                 <Heading label={"Sign in to your account"} />
             </div>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                
-                    <InputBox label={"Email address"} id={"email"} type={"email"} value={username} onChange={handleUsernameChange} />
 
-                    <div>
-                        <InputBox label={"Password"} id={"password"} type={"password"} value={password} onChange={handlePasswordChange} />
-                    </div>
+                <InputBox label={"Email address"} id={"email"} type={"email"} value={username} onChange={handleUsernameChange} />
 
-                    <div className="py-2">
-                           <Button onClick={handleSubmit} type="button" label={"Login"}></Button>
-                    </div>
+                <div>
+                    <InputBox label={"Password"} id={"password"} type={"password"} value={password} onChange={handlePasswordChange} />
+                </div>
+
+                <div className="py-2">
+                    <Button onClick={handleSubmit} type="button" label={"Login"}></Button>
+                </div>
             </div>
             <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/register"} />
             <div>
-            <BottomWarning label={"Forgot your account?"} buttonText={"Reset Password"} to={"/request-otp"} />
+                <BottomWarning label={"Forgot your account?"} buttonText={"Reset Password"} to={"/request-otp"} />
             </div>
         </div>
     </div>
