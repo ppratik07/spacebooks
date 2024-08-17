@@ -9,7 +9,7 @@ import { LandingPage } from './pages/LandingPage';
 
 function AppContent() {
     const location = useLocation();
-    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password'];
+    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/'];
 
     return (
         <>
