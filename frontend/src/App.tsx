@@ -5,6 +5,7 @@ import { ResetPassword } from './pages/ResetPassword';
 import SeatLayout from './pages/SeatLayout';
 import { Navbar } from './pages/NavigationBar';
 import RequestOtp from './pages/RequestOtp';
+import { LandingPage } from './pages/LandingPage';
 
 function AppContent() {
     const location = useLocation();
@@ -20,6 +21,7 @@ function AppContent() {
                 <Route path="/seatlayout" element={<SeatLayout />} />
                 <Route path="/request-otp" element={<RequestOtp />} />
                 <Route path='/reset-password' element={<ResetPassword/>}/>
+                <Route path='/' element={<LandingPage/>}/>
             </Routes>
         </>
     );
