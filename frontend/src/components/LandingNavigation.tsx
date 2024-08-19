@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 
 export const LandingNavigation = () => {
     return (
@@ -10,8 +9,8 @@ export const LandingNavigation = () => {
                         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Book Your Seat</span>
                     </a>
                     <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                      <div className="text-red-500">
-                        <Link href="/signin">SIGN IN</Link>
+                      <div className="text-red-500 font-serif text-xs">
+                        <a href="/login">SIGN IN</a>
                       </div>
                     </div>
                 </div>
