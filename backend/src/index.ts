@@ -11,8 +11,13 @@ import { UserPayload } from "./models/UserPayload";
 const cors = require("cors");
 const app = express();
 import nodemailer from "nodemailer";
+import multer from "multer";
+import csv from "csv-parser";
+import fs from "fs";
+import path from "path";
 
 const PORT = 3000;
+const upload = multer({ dest: "uploads/" });
 
 app.use(cors());
 app.use(express.json());
@@ -143,34 +148,33 @@ app.post("/reset-password/:token", async (req, res) => {
   }
 });
 
-app.post("/reset-password", async(req, res) => {
+app.post("/reset-password", async (req, res) => {
   const { email, otp, newPassword } = req.body;
-  try{
+  try {
     const user = await prisma.user.findFirst({
-      where:{
-        username : email,
+      where: {
+        username: email,
         otp,
-        otpExpiresAt:{
-          gt: new Date(), 
+        otpExpiresAt: {
+          gt: new Date(),
         },
       },
     });
-    if(!user){
+    if (!user) {
       res.status(400).send("Invalid or expired OTP");
     }
     await prisma.user.update({
-      where:{id: user?.id},
-      data:{
-        password : newPassword,
-        otp : null,
-        otpExpiresAt : null
+      where: { id: user?.id },
+      data: {
+        password: newPassword,
+        otp: null,
+        otpExpiresAt: null,
       },
     });
-      res.status(200).send("Password reset successfully !");
-  }
-  catch(err){
-    console.log("Error resetting the password",err);
-    res.status(500).send('Error resetting the password');
+    res.status(200).send("Password reset successfully !");
+  } catch (err) {
+    console.log("Error resetting the password", err);
+    res.status(500).send("Error resetting the password");
   }
 });
 
@@ -289,7 +293,64 @@ app.post("/api/reserve", async (req, res) => {
     res.status(500).send({ error: "Error reserving seats" });
   }
 });
+app.post('/upload-csv', upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
 
+  const { eventId } = req.body;
+  if (!eventId) {
+    return res.status(400).json({ message: 'Event ID is required' });
+  }
+
+  const filePath = path.join(__dirname, req.file.path);
+
+  const seatsData: any[] = [];
+
+  fs.createReadStream(filePath)
+    .pipe(csv())
+    .on('data', (row) => {
+      seatsData.push({
+        label: row.label,
+        x: parseInt(row.x, 10),
+        y: parseInt(row.y, 10),
+        row: row.row ? parseInt(row.row, 10) : null,
+        column: row.column ? parseInt(row.column, 10) : null,
+        status: 'available' 
+      });
+    })
+    .on('end', async () => {
+      try {
+        await prisma.seat.createMany({
+          data: seatsData.map(seat => ({
+            ...seat,
+            eventId: Number(eventId) 
+          })),
+        });
+
+        fs.unlinkSync(filePath);
+
+        res.json({ message: 'CSV processed and seats created successfully' });
+      } catch (error) {
+        console.error('Error processing CSV:', error);
+        res.status(500).json({ message: 'Error processing CSV' });
+      }
+    });
+});
+app.get('/event/:eventId/seats', async (req, res) => {
+  const { eventId } = req.params;
+
+  try {
+    const seats = await prisma.seat.findMany({
+      where: { eventId: Number(eventId) },
+      orderBy: [{ row: 'asc' }, { column: 'asc' }],
+    });
+    res.json(seats);
+  } catch (error) {
+    console.error('Error fetching seats:', error);
+    res.status(500).json({ message: 'Error fetching seats' });
+  }
+});
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
 });
