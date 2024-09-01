@@ -6,6 +6,7 @@ import SeatLayout from './pages/SeatLayout';
 import { Navbar } from './pages/NavigationBar';
 import RequestOtp from './pages/RequestOtp';
 import { LandingPage } from './pages/LandingPage';
+import CSVUpload from './components/CSVUpload';
 
 function AppContent() {
     const location = useLocation();
@@ -22,6 +23,7 @@ function AppContent() {
                 <Route path="/request-otp" element={<RequestOtp />} />
                 <Route path='/reset-password' element={<ResetPassword/>}/>
                 <Route path='/' element={<LandingPage/>}/>
+                <Route path='/csv' element={<CSVUpload/>}/>
             </Routes>
         </>
     );
