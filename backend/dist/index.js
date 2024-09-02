@@ -22,7 +22,12 @@ const crypto_1 = __importDefault(require("crypto"));
 const cors = require("cors");
 const app = (0, express_1.default)();
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const multer_1 = __importDefault(require("multer"));
+const csv_parser_1 = __importDefault(require("csv-parser"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const PORT = 3000;
+const upload = (0, multer_1.default)({ dest: "uploads/" });
 app.use(cors());
 app.use(express_1.default.json());
 const jwt = require("jsonwebtoken");
@@ -162,14 +167,14 @@ app.post("/reset-password", (req, res) => __awaiter(void 0, void 0, void 0, func
             data: {
                 password: newPassword,
                 otp: null,
-                otpExpiresAt: null
+                otpExpiresAt: null,
             },
         });
         res.status(200).send("Password reset successfully !");
     }
     catch (err) {
         console.log("Error resetting the password", err);
-        res.status(500).send('Error resetting the password');
+        res.status(500).send("Error resetting the password");
     }
 }));
 app.get("/profile", auth_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -274,6 +279,56 @@ app.post("/api/reserve", (req, res) => __awaiter(void 0, void 0, void 0, functio
     catch (error) {
         console.error("Error reserving seats", error);
         res.status(500).send({ error: "Error reserving seats" });
+    }
+}));
+app.post('/upload-csv', upload.single('file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+    const { eventId } = req.body;
+    if (!eventId) {
+        return res.status(400).json({ message: 'Event ID is required' });
+    }
+    const filePath = path_1.default.join(__dirname, req.file.path);
+    const seatsData = [];
+    fs_1.default.createReadStream(filePath)
+        .pipe((0, csv_parser_1.default)())
+        .on('data', (row) => {
+        seatsData.push({
+            label: row.label,
+            x: parseInt(row.x, 10),
+            y: parseInt(row.y, 10),
+            row: row.row ? parseInt(row.row, 10) : null,
+            column: row.column ? parseInt(row.column, 10) : null,
+            status: 'available'
+        });
+    })
+        .on('end', () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            yield prisma.seat.createMany({
+                data: seatsData.map(seat => (Object.assign(Object.assign({}, seat), { eventId: Number(eventId) }))),
+            });
+            fs_1.default.unlinkSync(filePath);
+            res.json({ message: 'CSV processed and seats created successfully' });
+        }
+        catch (error) {
+            console.error('Error processing CSV:', error);
+            res.status(500).json({ message: 'Error processing CSV' });
+        }
+    }));
+}));
+app.get('/event/:eventId/seats', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { eventId } = req.params;
+    try {
+        const seats = yield prisma.seat.findMany({
+            where: { eventId: Number(eventId) },
+            orderBy: [{ row: 'asc' }, { column: 'asc' }],
+        });
+        res.json(seats);
+    }
+    catch (error) {
+        console.error('Error fetching seats:', error);
+        res.status(500).json({ message: 'Error fetching seats' });
     }
 }));
 app.listen(PORT, () => {
