@@ -7,6 +7,7 @@ import { Navbar } from './pages/NavigationBar';
 import RequestOtp from './pages/RequestOtp';
 import { LandingPage } from './pages/LandingPage';
 import CSVUpload from './components/CSVUpload';
+import FloorPlan from './components/FloorPlan';
 
 function AppContent() {
     const location = useLocation();
@@ -24,6 +25,7 @@ function AppContent() {
                 <Route path='/reset-password' element={<ResetPassword/>}/>
                 <Route path='/' element={<LandingPage/>}/>
                 <Route path='/csv' element={<CSVUpload/>}/>
+                <Route path='/floor' element={<FloorPlan/>}/>
             </Routes>
         </>
     );
