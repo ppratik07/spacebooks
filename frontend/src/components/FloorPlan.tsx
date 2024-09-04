@@ -1,53 +1,40 @@
-// src/components/FloorPlan.tsx
-import React, { useState } from 'react';
-import { Stage, Layer, Rect, Text } from 'react-konva';
+import React from 'react';
 
-// Define a type for Desk
-type Desk = {
-  id: number;
-  x: number;
-  y: number;
-  isBooked: boolean;
-};
+const FloorLayout = () => {
+    return (
+        <svg
+            viewBox="0 0 800 600"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-auto"
+        >
+            {/* Background */}
+            <rect width="100%" height="100%" fill="#f0f0f0" />
 
-const initialDesks: Desk[] = [
-  { id: 1, x: 50, y: 50, isBooked: false },
-  { id: 2, x: 200, y: 50, isBooked: true },
-  { id: 3, x: 50, y: 200, isBooked: false },
-  { id: 4, x: 200, y: 200, isBooked: false },
-];
+            {/* Example Rooms */}
+            <rect x="50" y="50" width="200" height="150" fill="#e0e0e0" stroke="#000" />
+            <text x="150" y="130" textAnchor="middle" fontSize="16">Room 101</text>
 
-const FloorPlan: React.FC = () => {
-  const [desks, setDesks] = useState(initialDesks);
+            <rect x="300" y="50" width="200" height="150" fill="#e0e0e0" stroke="#000" />
+            <text x="400" y="130" textAnchor="middle" fontSize="16">Room 102</text>
 
-  const handleDeskClick = (deskId: number) => {
-    setDesks((prevDesks) =>
-      prevDesks.map((desk) =>
-        desk.id === deskId ? { ...desk, isBooked: !desk.isBooked } : desk
-      )
+            <rect x="550" y="50" width="200" height="150" fill="#e0e0e0" stroke="#000" />
+            <text x="650" y="130" textAnchor="middle" fontSize="16">Room 103</text>
+
+            {/* Example Desks */}
+            <rect x="100" y="250" width="50" height="50" fill="#d3d3d3" stroke="#000" />
+            <rect x="200" y="250" width="50" height="50" fill="#d3d3d3" stroke="#000" />
+
+            <rect x="350" y="250" width="50" height="50" fill="#d3d3d3" stroke="#000" />
+            <rect x="450" y="250" width="50" height="50" fill="#d3d3d3" stroke="#000" />
+
+            <rect x="600" y="250" width="50" height="50" fill="#d3d3d3" stroke="#000" />
+            <rect x="700" y="250" width="50" height="50" fill="#d3d3d3" stroke="#000" />
+
+            {/* Example Pathways */}
+            <line x1="50" y1="400" x2="750" y2="400" stroke="#000" strokeWidth="2" />
+            <line x1="50" y1="500" x2="750" y2="500" stroke="#000" strokeWidth="2" />
+        </svg>
     );
-  };
-
-  return (
-    <Stage width={window.innerWidth} height={window.innerHeight}>
-      <Layer>
-        <Text text="Interactive Floor Plan" fontSize={24} x={20} y={20} />
-        {desks.map((desk) => (
-          <Rect
-            key={desk.id}
-            x={desk.x}
-            y={desk.y}
-            width={100}
-            height={100}
-            fill={desk.isBooked ? 'red' : 'green'}
-            stroke="black"
-            strokeWidth={2}
-            onClick={() => handleDeskClick(desk.id)}
-          />
-        ))}
-      </Layer>
-    </Stage>
-  );
 };
 
-export default FloorPlan;
+export default FloorLayout;
