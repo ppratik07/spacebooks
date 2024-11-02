@@ -8,10 +8,12 @@ import RequestOtp from './pages/RequestOtp';
 import { LandingPage } from './pages/LandingPage';
 import CSVUpload from './components/CSVUpload';
 import FloorPlan from './components/FloorPlan';
+import MapComponent from './components/MapComponent';
+import { MainPage } from './pages/MainPage';
 
 function AppContent() {
     const location = useLocation();
-    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/'];
+    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/','/main'];
 
     return (
         <>
@@ -26,6 +28,7 @@ function AppContent() {
                 <Route path='/' element={<LandingPage/>}/>
                 <Route path='/csv' element={<CSVUpload/>}/>
                 <Route path='/floor' element={<FloorPlan/>}/>
+                <Route path='/main' element={<MainPage/>}/>
             </Routes>
         </>
     );
