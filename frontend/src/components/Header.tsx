@@ -2,7 +2,7 @@ export const Header = () => {
     return (
         <div>
             <header className="flex justify-between items-center px-10 py-5">
-                <h1 className="text-xl font-bold">Scheda</h1>
+                <h1 className="text-xl font-bold">SpaceBooks</h1>
                 <nav className="flex space-x-6">
                     <a href="#product" className="hover:text-blue-600">Product</a>
                     <a href="#community" className="hover:text-blue-600">Community</a>
