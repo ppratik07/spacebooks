@@ -1,4 +1,4 @@
-## BUS SeatBook Application
+## SpaceBooks SeatBook Application
   - Login
   - Register
   - get the seats
