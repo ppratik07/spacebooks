@@ -1,6 +1,6 @@
 ## SpaceBooks SeatBook Application
   - Login
-  - Register
+  - Signup
   - get the seats
-  - resetting the password
+  - Reset Password
     
