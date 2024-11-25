@@ -1,3 +1,4 @@
+import { Header } from "../components/Header"
 
 export const LandingPage = ()=>{
     return(
@@ -5,6 +6,7 @@ export const LandingPage = ()=>{
             {/* <LandingNavigation/> */}
             {/* <PageCopy/> */}
             {/* <Navigation/> */}
+            <Header/>
         </div>
     )
 }
