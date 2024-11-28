@@ -18,13 +18,13 @@ export const HeroSection = () => {
                     </button>
                 </div>
                 <div className="relative mt-10 md:mt-0">
-                    {/* Main Illustration */}
+                  
                     <img
                         src="/personIllustrator.png"
                         alt="Illustration"
                         className="w-full max-w-md"
                     />
-                    {/* Floating Elements */}
+            
                     <div className="absolute top-10 -left-12">
                         <img src="/pin.png" alt="Pin" className="w-12" />
                     </div>
