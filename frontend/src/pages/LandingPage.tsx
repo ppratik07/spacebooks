@@ -1,12 +1,15 @@
-import { Header } from "../components/Header"
+import { HeroSection } from "../components/HeroSection"
+import { MainHeadline } from "../components/MainHeadline"
 
 export const LandingPage = ()=>{
     return(
-         <div className="min-h-screen bg-gradient-to-b from-[#e0e7ff] to-[#ffffff]">
+         <div>
             {/* <LandingNavigation/> */}
             {/* <PageCopy/> */}
             {/* <Navigation/> */}
-            <Header/>
+            {/* <Header/> */}
+            <HeroSection/>
+            <MainHeadline/>
         </div>
     )
 }
