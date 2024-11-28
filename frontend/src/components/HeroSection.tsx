@@ -1,9 +1,9 @@
-import { Header } from "./Header";
+import { HeaderNavigation } from "./HeaderNavigation";
 
 export const HeroSection = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#e0e7ff] to-[#ffffff] pl-40 pr-36">
-            <Header />
+            <HeaderNavigation />
             {/* Hero Section */}
             <section className="flex flex-col md:flex-row items-center justify-between px-10 pt-28">
                 <div className="max-w-lg text-center md:text-left">
