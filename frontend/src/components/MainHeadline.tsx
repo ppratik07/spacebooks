@@ -16,10 +16,10 @@ export const MainHeadline = () => {
                     </p>
                 </div>
 
-                {/* Goals Section */}
+                {/* Goals Section
                 <div className="bg-gray-100 py-8">
                     <h2 className="text-gray-800 text-3xl font-bold">Goals</h2>
-                </div>
+                </div> */}
             </div>
         </div>
     );
