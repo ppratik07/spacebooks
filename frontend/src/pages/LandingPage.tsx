@@ -1,4 +1,5 @@
 import { BookingFeatures } from "../components/BookingFeatures"
+import FAQSection from "../components/FAQs"
 import FooterBanner from "../components/FooterBanner"
 import { FooterSection } from "../components/FooterSection"
 import { HeroSection } from "../components/HeroSection"
@@ -13,6 +14,7 @@ export const LandingPage = ()=>{
             <BookingFeatures/>
             <Testimonials/>
             <FooterBanner/>
+            <FAQSection/>
             <FooterSection/>
         </div>
     )
