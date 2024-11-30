@@ -24,6 +24,11 @@ const FAQSection: React.FC = () => {
       answer:
         "Desk booking works by allowing users to reserve desks in advance through a software interface. Administrators can track desk utilization and optimize space.",
     },
+    {
+        question: "What is a desk sharing workplace?",
+        answer:
+          "A desk sharing workplace, also known as a shared desk or hot desk, is not just assigned to one permanent employee. The flexible workstation is available to every employee in the company and can be booked via desk sharing software",
+      },
   ];
 
   const toggleFAQ = (index: number): void => {
@@ -34,7 +39,7 @@ const FAQSection: React.FC = () => {
     <div className="bg-gray-100 py-10 px-4">
       <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-gray-800 text-center py-6">
-          Desk Booking Solution – FAQs and Answers
+          SpaceBooks  – FAQs and Answers
         </h2>
         <div className="divide-y divide-gray-200">
           {faqs.map((faq, index) => (
