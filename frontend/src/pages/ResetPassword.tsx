@@ -39,27 +39,30 @@ export const ResetPassword = () => {
         }
     }
     return (
-        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <Heading label={"Please Enter your new password"} />
-            </div>
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div>
+            <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                    <Heading label={"Please Enter your new password"} />
+                </div>
+                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 
-                <InputBox label={"Email address"} id={"email"} type={"email"} value={email} onChange={handleUsernameChange} />
+                    <InputBox label={"Email address"} id={"email"} type={"email"} value={email} onChange={handleUsernameChange} />
 
-                <div>
-                    <InputBox label={"otp"} id={"otp"} type={"string"} value={otp} onChange={handleOtpChange} />
+                    <div>
+                        <InputBox label={"otp"} id={"otp"} type={"string"} value={otp} onChange={handleOtpChange} />
+                    </div>
+                    <div>
+                        <InputBox label={"Password"} id={"password"} type={"password"} value={newpassword} onChange={handlePasswordChange} />
+                    </div>
+                    <div className="py-2">
+                        <Button onClick={handleSubmit} type={"button"} label={"Submit"}></Button>
+                    </div>
+                    <div>
+                        <BottomWarning label={"Back to Login?"} buttonText={"Login"} to={"/login"} />
+                    </div>
                 </div>
-                <div>
-                    <InputBox label={"Password"} id={"password"} type={"password"} value={newpassword} onChange={handlePasswordChange} />
-                </div>
-                <div className="py-2">
-                    <Button onClick={handleSubmit} type={"button"} label={"Submit"}></Button>
-                </div>
-                <div>
-                <BottomWarning label={"Back to Login?"} buttonText={"Login"} to={"/login"} />
-            </div>
             </div>
         </div>
+
     );
 }
