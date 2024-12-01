@@ -7,6 +7,7 @@ import axios from "axios"
 import { BottomWarning } from "../components/Warning"
 import { useNavigate } from "react-router-dom"
 import { ClipLoader } from "react-spinners"
+import { LogoHeader } from "../components/LogoHeading"
 
 export const Register = () => {
     const [username, setUsername] = useState<string>("");
@@ -16,6 +17,7 @@ export const Register = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     return <div>
+        <LogoHeader/>
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <Heading label={"Sign up to your account"} />
