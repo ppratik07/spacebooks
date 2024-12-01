@@ -8,7 +8,7 @@ import RequestOtp from './pages/RequestOtp';
 import { LandingPage } from './pages/LandingPage';
 import CSVUpload from './components/CSVUpload';
 import FloorPlan from './components/FloorPlan';
-import MapComponent from './components/MapComponent';
+import HamburgerMenu from './pages/'
 import { MainPage } from './pages/MainPage';
 
 function AppContent() {
@@ -29,6 +29,7 @@ function AppContent() {
                 <Route path='/csv' element={<CSVUpload/>}/>
                 <Route path='/floor' element={<FloorPlan/>}/>
                 <Route path='/main' element={<MainPage/>}/>
+                <Route path='/hamburger' element={<HamburgerMenu/>}/>
             </Routes>
         </>
     );

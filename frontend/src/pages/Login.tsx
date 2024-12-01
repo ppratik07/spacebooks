@@ -33,7 +33,7 @@ export const Login = () => {
                 localStorage.setItem('token_expiration', token_expiration.toString());
                 localStorage.setItem('timeLeft', '300');
                 localStorage.setItem('timestamp', Date.now().toString());
-                window.location = "/seatlayout";
+                window.location = "/";
             } else {
                 alert("invalid credentials");
             }
