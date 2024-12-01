@@ -10,13 +10,13 @@ const SidebarMenu: React.FC = () => {
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
+
       <div
         className={`${
           isOpen ? "w-64" : "w-16"
         } bg-blue-800 text-white transition-width duration-300 flex flex-col`}
       >
-        {/* Hamburger Button */}
+
         <div className="p-4 cursor-pointer" onClick={toggleSidebar}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +34,7 @@ const SidebarMenu: React.FC = () => {
           </svg>
         </div>
 
-        {/* Menu Items */}
+
         <nav className="flex flex-col gap-4 mt-4">
           <Link
             to="/office-map"
@@ -57,7 +57,7 @@ const SidebarMenu: React.FC = () => {
             {isOpen && <span>Office Map</span>}
           </Link>
 
-          {/* Additional Menu Items */}
+
           <div className="flex items-center gap-4 p-3 hover:bg-blue-600">
             <svg
               xmlns="http://www.w3.org/2000/svg"
