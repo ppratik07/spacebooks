@@ -4,6 +4,7 @@ import InputBox from '../components/InputBox';
 import { Heading } from '../components/Heading';
 import { useNavigate } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
+import { LogoHeader } from '../components/LogoHeading';
 
 const RequestOtp = () => {
     const [email, setEmail] = useState('');
@@ -30,6 +31,7 @@ const RequestOtp = () => {
 
     return (
         <form onSubmit={handleRequestOtp}>
+            <LogoHeader />
             <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <Heading label={"Reset your account"} />
