@@ -4,6 +4,7 @@ import InputBox from "../components/InputBox";
 import { BottomWarning } from "../components/Warning";
 import { Button } from "../components/Button";
 import { ClipLoader } from "react-spinners";
+import { LogoHeader } from "../components/LogoHeading";
 export const Login = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -45,6 +46,7 @@ export const Login = () => {
 
     }
     return <div>
+        <LogoHeader/>
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <Heading label={"Sign in to your account"} />
