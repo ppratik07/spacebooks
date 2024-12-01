@@ -8,12 +8,12 @@ import RequestOtp from './pages/RequestOtp';
 import { LandingPage } from './pages/LandingPage';
 import CSVUpload from './components/CSVUpload';
 import FloorPlan from './components/FloorPlan';
-import HamburgerMenu from './pages/'
+import {HamburgerMenu} from './pages/HamburgerMenu'
 import { MainPage } from './pages/MainPage';
 
 function AppContent() {
     const location = useLocation();
-    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/','/main'];
+    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/','/main','/hamburger'];
 
     return (
         <>
