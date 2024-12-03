@@ -5,7 +5,7 @@ const SidebarMenu: React.FC = () => {
 
   useEffect(() => {
     if (activeMenu === "Office Map") {
-      // Dynamically load the script
+     
       const script = document.createElement("script");
       script.src = "https://interactive-img.com/js/include.js";
       script.async = true;
