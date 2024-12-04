@@ -67,9 +67,7 @@ const SidebarMenu: React.FC = () => {
             <div className="iactiveImg" data-ii="62712"></div>
           </div>
         )}
-      </div>
-      <div>
-        <ProductModal/>
+         <ProductModal/>
       </div>
     </div>
   );
