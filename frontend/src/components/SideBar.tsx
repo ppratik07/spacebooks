@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProductModal from "./SeatModal";
+import ProductModal from "./ProductModal";
 
 const SidebarMenu: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -67,7 +67,7 @@ const SidebarMenu: React.FC = () => {
             <div className="iactiveImg" data-ii="62712"></div>
           </div>
         )}
-         <ProductModal/>
+  <ProductModal/>
       </div>
     </div>
   );
