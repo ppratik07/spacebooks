@@ -96,7 +96,7 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             password,
         },
     });
-    if (!getUser) {
+    if (!getUser || getUser.password != password) {
         res.status(403).send({
             message: "user not found/Incorrect credentials",
         });
@@ -104,7 +104,8 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const token = yield jwt.sign({ userid: getUser === null || getUser === void 0 ? void 0 : getUser.id }, process.env.JWT_SECRET);
     return res.status(200).json({
         message: "User signed in successfully",
-        token,
+        name: getUser === null || getUser === void 0 ? void 0 : getUser.name,
+        token
     });
 }));
 app.post("/api/request-otp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
