@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 const ProductModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const[currentDate,setCurrentDate] = useState('');
+  const username = localStorage.getItem('name');
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
@@ -26,10 +27,11 @@ const ProductModal = () => {
   useEffect(()=>{
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
+    //const formattedDateDD = today.getDate() + "-"+ parseInt(today.getMonth()+1) +"-"+today.getFullYear(); -> Get in DDMMYY
     setCurrentDate(formattedDate);
   },[])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted");
     toggleModal();
@@ -91,6 +93,7 @@ const ProductModal = () => {
                       type="text"
                       name="name"
                       id="name"
+                      value={username}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Enter your name"
                       required
@@ -108,7 +111,8 @@ const ProductModal = () => {
                       name="name"
                       id="name"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Enter your name"
+                      value={currentDate}
+                      onChange={(e)=>setCurrentDate(e.target.value)}
                       required
                     />
                   </div>
