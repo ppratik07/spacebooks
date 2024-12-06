@@ -53,6 +53,7 @@ export const Register = () => {
                                 name
                             });
                             localStorage.setItem('token', response.data.token);
+                            localStorage.setItem('name', name);
                             if (response.status == 200) {
                                 alert("User created successfully.Please click Ok to login");
                                 navigate('/login')
