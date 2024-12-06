@@ -45,7 +45,7 @@ const ProductModal = () => {
               {/* Modal header */}
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Create New Product
+                  Book Your Seat 
                 </h3>
                 <button
                   onClick={toggleModal}
@@ -86,7 +86,7 @@ const ProductModal = () => {
                       name="name"
                       id="name"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      placeholder="Type product name"
+                      placeholder="Enter your name"
                       required
                     />
                   </div>
