@@ -90,7 +90,7 @@ app.post("/signin", async (req, res) => {
       password,
     },
   });
-  if (!getUser) {
+  if (!getUser || getUser.password != password) {
     res.status(403).send({
       message: "user not found/Incorrect credentials",
     });
@@ -98,7 +98,8 @@ app.post("/signin", async (req, res) => {
   const token = await jwt.sign({ userid: getUser?.id }, process.env.JWT_SECRET);
   return res.status(200).json({
     message: "User signed in successfully",
-    token,
+    name: getUser?.name,
+    token
   });
 });
 
