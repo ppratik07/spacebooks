@@ -39,11 +39,6 @@ const ProductModal = () => {
 
   return (
     <div>
-      {/* <a href="#openModal" className="pointBoxLink text-blue-500 underline">
-        Open Modal
-      </a> */}
-
-      {/* Modal */}
       {isOpen && (
         <div
           className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50"

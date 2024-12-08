@@ -2,7 +2,6 @@ export const MainHeadline = () => {
     return (
         <div>
             <div className="text-center">
-                {/* Purple Background Section */}
                 <div className="bg-gradient-to-r from-purple-500 to-blue-500 py-16">
                     <h1 className="text-white text-4xl font-bold mb-4">
                         <span className="relative">
@@ -15,11 +14,6 @@ export const MainHeadline = () => {
                         Easy, like one-two-three!
                     </p>
                 </div>
-
-                {/* Goals Section
-                <div className="bg-gray-100 py-8">
-                    <h2 className="text-gray-800 text-3xl font-bold">Goals</h2>
-                </div> */}
             </div>
         </div>
     );

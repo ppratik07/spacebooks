@@ -1,13 +1,13 @@
 import { useState } from "react"
-import { Heading } from "../components/Heading"
-import InputBox from "../components/InputBox"
-import { SubHeading } from "../components/SubHeading"
-import { Button } from "../components/Button"
+import { Heading } from "../components/ui/Heading"
+import InputBox from "../components/ui/InputBox"
+import { SubHeading } from "../components/ui/SubHeading"
+import { Button } from "../components/ui/Button"
 import axios from "axios"
-import { BottomWarning } from "../components/Warning"
+import { BottomWarning } from "../components/ui/Warning"
 import { useNavigate } from "react-router-dom"
 import { ClipLoader } from "react-spinners"
-import { LogoHeader } from "../components/LogoHeading"
+import { LogoHeader } from "../components/Landing/LogoHeading"
 
 export const Register = () => {
     const [username, setUsername] = useState<string>("");

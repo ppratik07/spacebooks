@@ -1,5 +1,5 @@
 import React from "react"
-import SideNavigation from "../components/SideNavigation";
+import SideNavigation from "../components/LeftNavigation/SideNavigation";
 
 export const HamburgerMenu = ()=>{
     return(

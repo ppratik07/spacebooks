@@ -1,10 +1,10 @@
 import { useState } from "react"
-import { Heading } from "../components/Heading";
-import InputBox from "../components/InputBox";
-import { Button } from "../components/Button";
+import { Heading } from "../components/ui/Heading";
+import InputBox from "../components/ui/InputBox";
+import { Button } from "../components/ui/Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { BottomWarning } from "../components/Warning";
+import { BottomWarning } from "../components/ui/Warning";
 
 export const ResetPassword = () => {
     const [email, setEmail] = useState<string>('');

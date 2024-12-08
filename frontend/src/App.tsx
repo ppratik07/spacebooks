@@ -6,8 +6,8 @@ import SeatLayout from './pages/SeatLayout';
 import { Navbar } from './pages/NavigationBar';
 import RequestOtp from './pages/RequestOtp';
 import { LandingPage } from './pages/LandingPage';
-import CSVUpload from './components/CSVUpload';
-import FloorPlan from './components/FloorPlan';
+import CSVUpload from './components/ui/CSVUpload';
+import FloorPlan from './components/ui/FloorPlan';
 import {HamburgerMenu} from './pages/HamburgerMenu'
 import { MainPage } from './pages/MainPage';
 

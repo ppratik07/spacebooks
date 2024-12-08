@@ -1,10 +1,10 @@
-import { BookingFeatures } from "../components/BookingFeatures"
-import FAQSection from "../components/FAQs"
-import FooterBanner from "../components/FooterBanner"
-import { FooterSection } from "../components/FooterSection"
+import { BookingFeatures } from "../components/Landing/BookingFeatures"
+import FAQSection from "../components/Landing/FAQs"
+import FooterBanner from "../components/Landing/FooterBanner"
+import { FooterSection } from "../components/Landing/FooterSection"
 import { HeroSection } from "../components/Landing/HeroSection"
-import { MainHeadline } from "../components/MainHeadline"
-import Testimonials from "../components/Testimonials"
+import { MainHeadline } from "../components/Landing/MainHeadline"
+import Testimonials from "../components/Landing/Testimonials"
 
 export const LandingPage = ()=>{
     return(

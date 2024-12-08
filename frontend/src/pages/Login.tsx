@@ -1,10 +1,10 @@
 import React, { useState } from "react"
-import { Heading } from "../components/Heading"
-import InputBox from "../components/InputBox";
-import { BottomWarning } from "../components/Warning";
-import { Button } from "../components/Button";
+import { Heading } from "../components/ui/Heading"
+import InputBox from "../components/ui/InputBox";
+import { BottomWarning } from "../components/ui/Warning";
+import { Button } from "../components/ui/Button";
 import { ClipLoader } from "react-spinners";
-import { LogoHeader } from "../components/LogoHeading";
+import { LogoHeader } from "../components/Landing/LogoHeading";
 export const Login = () => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
