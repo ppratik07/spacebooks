@@ -49,7 +49,7 @@ const ProductModal = () => {
         >
           <div className="relative p-4 w-full max-w-md">
             <div className="bg-white rounded-lg shadow dark:bg-gray-700">
-              {/* Modal header */}
+      
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Book Your Seat
@@ -77,9 +77,7 @@ const ProductModal = () => {
                 </button>
               </div>
 
-              {/* Modal body */}
               <form className="p-4 md:p-5" onSubmit={handleSubmit}>
-                {/* Form fields */}
                 <div className="grid gap-4 mb-4 grid-cols-2">
                   <div className="col-span-2">
                     <label
