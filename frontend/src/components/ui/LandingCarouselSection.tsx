@@ -1,10 +1,6 @@
-import { HeaderNavigation } from "./HeaderNavigation";
-
-export const HeroSection = () => {
+export const LandingHeroSection = ()  =>{
     return (
-        <div className="min-h-screen bg-gradient-to-b from-[#e0e7ff] to-[#ffffff] pl-40 pr-36">
-            <HeaderNavigation />
-            {/* Hero Section */}
+        <div>
             <section className="flex flex-col md:flex-row items-center justify-between px-10 pt-28">
                 <div className="max-w-lg text-center md:text-left">
                     <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -37,5 +33,5 @@ export const HeroSection = () => {
                 </div>
             </section>
         </div>
-    );
+    )
 }

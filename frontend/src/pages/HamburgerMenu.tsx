@@ -1,10 +1,10 @@
 import React from "react"
-import SidebarMenu from "../components/SideBar"
+import SideNavigation from "../components/SideNavigation";
 
 export const HamburgerMenu = ()=>{
     return(
          <div>
-           <SidebarMenu/>
+           <SideNavigation/>
         </div>
     );
 }

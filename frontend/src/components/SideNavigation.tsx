@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import ProductModal from "./ProductModal";
+import BookingModalForm from "./BookingModalForm";
 
-const SidebarMenu: React.FC = () => {
+const SideNavigation: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   useEffect(() => {
     if (activeMenu === "Office Map") {
-     
+
       const script = document.createElement("script");
       script.src = "https://interactive-img.com/js/include.js";
       script.async = true;
@@ -67,10 +67,10 @@ const SidebarMenu: React.FC = () => {
             <div className="iactiveImg" data-ii="62712"></div>
           </div>
         )}
-  <ProductModal/>
+        <BookingModalForm />
       </div>
     </div>
   );
 };
 
-export default SidebarMenu;
+export default SideNavigation;
