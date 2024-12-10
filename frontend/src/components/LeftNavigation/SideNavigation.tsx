@@ -11,8 +11,6 @@ const SideNavigation: React.FC = () => {
       script.src = "https://interactive-img.com/js/include.js";
       script.async = true;
       document.body.appendChild(script);
-
-      // Cleanup script when unmounting
       return () => {
         document.body.removeChild(script);
       };
