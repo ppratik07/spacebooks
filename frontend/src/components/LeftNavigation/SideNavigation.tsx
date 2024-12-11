@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BookingModalForm from "./BookingModalForm";
+import { MyBookings } from "./MyBookings";
 
 const SideNavigation: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -57,6 +58,26 @@ const SideNavigation: React.FC = () => {
             </svg>
             <span>Office Map</span>
           </div>
+          <div
+            className="flex items-center gap-4 p-3 hover:bg-blue-600 cursor-pointer"
+            onClick={() => setActiveMenu("My Bookings")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 8h14M5 16h14M5 12h14m0 4H5"
+              />
+            </svg>
+            <span>My Bookings</span>
+          </div>
         </nav>
       </div>
       <div className="flex-1 bg-gray-100 p-4">
@@ -65,6 +86,7 @@ const SideNavigation: React.FC = () => {
             <div className="iactiveImg" data-ii="62712"></div>
           </div>
         )}
+          {activeMenu === "My Bookings" && <MyBookings />}
         <BookingModalForm />
       </div>
     </div>
