@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { generateTimeOptions } from "../../helpers/TimeOptions";
+import { useNavigate } from "react-router-dom";
 
 const ProductModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,6 +9,7 @@ const ProductModal = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const timeOptions = generateTimeOptions();
+  const navigate = useNavigate();
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
