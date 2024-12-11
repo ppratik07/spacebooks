@@ -10,10 +10,11 @@ import CSVUpload from './components/ui/_CSVUpload';
 import FloorPlan from './components/ui/FloorPlan';
 import {HamburgerMenu} from './pages/HamburgerMenu'
 import { MainPage } from './pages/_MainPage';
+import { MyBookings } from './components/LeftNavigation/MyBookings';
 
 function AppContent() {
     const location = useLocation();
-    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/','/main','/hamburger'];
+    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/','/main','/hamburger','/mybookings'];
 
     return (
         <>
@@ -30,6 +31,7 @@ function AppContent() {
                 <Route path='/floor' element={<FloorPlan/>}/>
                 <Route path='/main' element={<MainPage/>}/>
                 <Route path='/hamburger' element={<HamburgerMenu/>}/>
+                <Route path='/mybookings' element={<MyBookings/>}/>
             </Routes>
         </>
     );
