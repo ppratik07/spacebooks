@@ -2,14 +2,14 @@ import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { ResetPassword } from './pages/ResetPassword';
-import SeatLayout from './pages/SeatLayout';
-import { Navbar } from './pages/NavigationBar';
+import SeatLayout from './pages/_SeatLayout';
+import { Navbar } from './pages/_NavigationBar';
 import RequestOtp from './pages/RequestOtp';
 import { LandingPage } from './pages/LandingPage';
-import CSVUpload from './components/ui/CSVUpload';
+import CSVUpload from './components/ui/_CSVUpload';
 import FloorPlan from './components/ui/FloorPlan';
 import {HamburgerMenu} from './pages/HamburgerMenu'
-import { MainPage } from './pages/MainPage';
+import { MainPage } from './pages/_MainPage';
 
 function AppContent() {
     const location = useLocation();
