@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { generateTimeOptions } from "../../helpers/TimeOptions";
 import { useNavigate } from "react-router-dom";
+import { useBooking } from "../Context/BookingContext";
 
 const ProductModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,13 @@ const ProductModal = () => {
   const [endTime, setEndTime] = useState("");
   const timeOptions = generateTimeOptions();
   const navigate = useNavigate();
+  const[formData,setFormData] = useState({
+    name: "",
+    date : "",
+    startTime : "",
+    endTime : "",
+  })
+  const { setBookingData } = useBooking();
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
@@ -39,8 +47,14 @@ const ProductModal = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    setBookingData({
+      date: currentDate,
+      startTime: startTime,
+      endTime: endTime,
+    });
+    console.log("Form submitted with data:", { currentDate, startTime, endTime });
     toggleModal();
+    setFormData({ name: "", date: "", startTime: "", endTime: "" }); 
   };
 
   return (
@@ -100,15 +114,15 @@ const ProductModal = () => {
                   </div>
                   <div className="col-span-2">
                     <label
-                      htmlFor="name"
+                      htmlFor="date"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Date
                     </label>
                     <input
                       type="text"
-                      name="name"
-                      id="name"
+                      name="date"
+                      id="date"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       value={currentDate}
                       onChange={(e) => setCurrentDate(e.target.value)}
@@ -117,13 +131,13 @@ const ProductModal = () => {
                   </div>
                   <div className="col-span-2">
                     <label
-                      htmlFor="name"
+                      htmlFor="starttime"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Start Time
                     </label>
                     <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                    value={startTime} onChange={(e) => setStartTime(e.target.value)}>
+                    value={startTime} name="startTime" id="startTime" onChange={(e) => setStartTime(e.target.value)}>
                       <option value="" disabled>Select start time</option>
                       {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
@@ -139,7 +153,7 @@ const ProductModal = () => {
                         End Time
                       </label>
                       <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                       value={endTime} onChange={(e) => setEndTime(e.target.value)}>
+                       value={endTime} id="endTime" name="endTime" onChange={(e) => setEndTime(e.target.value)}>
                       <option value="" disabled>Select start time</option>
                       {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
