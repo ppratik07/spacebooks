@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BookingModalForm from "./BookingModalForm";
 import { MyBookings } from "./MyBookings";
+import { BookingProvider } from "../Context/BookingContext";
 
 const SideNavigation: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -86,8 +87,11 @@ const SideNavigation: React.FC = () => {
             <div className="iactiveImg" data-ii="62712"></div>
           </div>
         )}
+        <BookingProvider>
           {activeMenu === "My Bookings" && <MyBookings />}
-        <BookingModalForm />
+          <BookingModalForm />
+        </BookingProvider>
+
       </div>
     </div>
   );
