@@ -18,8 +18,8 @@ const ProductModal = () => {
   };
 
   useEffect(() => {
-    const handleLinkClick = (event) => {
-      const target = event.target.closest(".pointBoxLink");
+    const handleLinkClick = (event : MouseEvent) => {
+      const target = (event.target as HTMLElement).closest(".pointBoxLink");
       if (target) {
         event.preventDefault(); 
         toggleModal(); 
