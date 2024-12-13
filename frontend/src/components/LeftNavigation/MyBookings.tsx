@@ -2,10 +2,11 @@ import { useBooking } from "../Context/BookingContext";
 
 export const MyBookings = () => {
   const { bookingData } = useBooking();
+  const hasBooking = bookingData && Object.keys(bookingData).length>0;
 
   return (
     <div>
-      {bookingData ? (
+      {hasBooking ? (
         <div>
           <p>Name: {bookingData.name}</p>
           <p>Date: {bookingData.date}</p>
@@ -13,7 +14,9 @@ export const MyBookings = () => {
           <p>End Time: {bookingData.endTime}</p>
         </div>
       ) : (
-        <p>No booking data available.</p>
+        <div>
+            <p>No booking data available.</p>
+        </div>      
       )}
     </div>
   );
