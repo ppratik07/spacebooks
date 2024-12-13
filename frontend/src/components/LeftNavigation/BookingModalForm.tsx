@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { generateTimeOptions } from "../../helpers/TimeOptions";
-import { useNavigate } from "react-router-dom";
 import { useBooking } from "../Context/BookingContext";
 
 const ProductModal = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentDate, setCurrentDate] = useState('');
-  const username = localStorage.getItem('name');
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
   const timeOptions = generateTimeOptions();
-  const navigate = useNavigate();
-  const[formData,setFormData] = useState({
-    name: "",
-    date : "",
-    startTime : "",
-    endTime : "",
-  })
+
+  const [formData, setFormData] = useState({
+    name: localStorage.getItem("name") || "", 
+    date: "",
+    startTime: "",
+    endTime: "",
+  });
   const { setBookingData } = useBooking();
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -26,8 +21,8 @@ const ProductModal = () => {
     const handleLinkClick = (event) => {
       const target = event.target.closest(".pointBoxLink");
       if (target) {
-        event.preventDefault(); // Prevent the default navigation behavior
-        toggleModal(); // Open the modal
+        event.preventDefault(); 
+        toggleModal(); 
       }
     };
 
@@ -39,24 +34,28 @@ const ProductModal = () => {
   }, []);
 
   useEffect(() => {
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    //const formattedDateDD = today.getDate() + "-"+ parseInt(today.getMonth()+1) +"-"+today.getFullYear(); -> Get in DDMMYY
-    setCurrentDate(formattedDate);
-  }, [])
+    if (isOpen) {
+      const today = new Date();
+      const formattedDate = today.toISOString().split("T")[0];
+      setFormData((prevData) => ({ ...prevData, date: formattedDate }));
+    }
+  }, [isOpen]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setBookingData({
-      date: currentDate,
-      startTime: startTime,
-      endTime: endTime,
-    });
-    console.log("Form submitted with data:", { currentDate, startTime, endTime });
-    toggleModal();
-    setFormData({ name: "", date: "", startTime: "", endTime: "" }); 
+    setBookingData(formData); //Sending form data to context
+    setFormData({ name: "", date: "", startTime: "", endTime: "" }); // Resetting form data
+    console.log("Form submitted:", formData);
+    toggleModal(); 
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
   return (
     <div>
       {isOpen && (
@@ -106,7 +105,8 @@ const ProductModal = () => {
                       type="text"
                       name="name"
                       id="name"
-                      value={username}
+                      value={formData.name}
+                      onChange={handleChange}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       placeholder="Enter your name"
                       required
@@ -124,8 +124,8 @@ const ProductModal = () => {
                       name="date"
                       id="date"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                      value={currentDate}
-                      onChange={(e) => setCurrentDate(e.target.value)}
+                      value={formData.date}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -137,7 +137,8 @@ const ProductModal = () => {
                       Start Time
                     </label>
                     <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                    value={startTime} name="startTime" id="startTime" onChange={(e) => setStartTime(e.target.value)}>
+                   value={formData.startTime}
+                   onChange={handleChange} name="startTime" id="startTime" >
                       <option value="" disabled>Select start time</option>
                       {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
@@ -153,7 +154,8 @@ const ProductModal = () => {
                         End Time
                       </label>
                       <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                       value={endTime} id="endTime" name="endTime" onChange={(e) => setEndTime(e.target.value)}>
+                       value={formData.endTime}
+                       onChange={handleChange} id="endTime" name="endTime">
                       <option value="" disabled>Select start time</option>
                       {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
