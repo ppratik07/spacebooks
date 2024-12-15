@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { generateTimeOptions } from "../../helpers/TimeOptions";
 import { useBooking } from "../Context/BookingContext";
+import { ConfirmationPage } from "../ui/Confirmation";
 
 const ProductModal = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const timeOptions = generateTimeOptions();
 
   const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ const ProductModal = () => {
     endTime: "",
   });
   const { setBookingData } = useBooking();
+
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
@@ -47,6 +50,7 @@ const ProductModal = () => {
     setFormData({ name: "", date: "", startTime: "", endTime: "" }); // Resetting form data
     console.log("Form submitted:", formData);
     toggleModal();
+    setShowSuccess(true);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -56,8 +60,22 @@ const ProductModal = () => {
       [name]: value,
     }));
   };
+
   return (
     <div>
+      {showSuccess && (
+        <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <ConfirmationPage />
+            <button
+              onClick={() => setShowSuccess(false)} // Close the popup
+              className="mt-4 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
       {isOpen && (
         <div
           className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50"
@@ -91,7 +109,7 @@ const ProductModal = () => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
-       {/* FORM MODAL POPUP */}
+              {/* FORM MODAL POPUP */}
               <form className="p-4 md:p-5" onSubmit={handleSubmit}>
                 <div className="grid gap-4 mb-4 grid-cols-2">
                   <div className="col-span-2">
@@ -173,10 +191,12 @@ const ProductModal = () => {
                   Book Desk
                 </button>
               </form>
+            
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 };
