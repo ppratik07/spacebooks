@@ -7,7 +7,7 @@ const ProductModal = () => {
   const timeOptions = generateTimeOptions();
 
   const [formData, setFormData] = useState({
-    name: localStorage.getItem("name") || "", 
+    name: localStorage.getItem("name") || "",
     date: "",
     startTime: "",
     endTime: "",
@@ -18,11 +18,11 @@ const ProductModal = () => {
   };
 
   useEffect(() => {
-    const handleLinkClick = (event : MouseEvent) => {
+    const handleLinkClick = (event: MouseEvent) => {
       const target = (event.target as HTMLElement).closest(".pointBoxLink");
       if (target) {
-        event.preventDefault(); 
-        toggleModal(); 
+        event.preventDefault();
+        toggleModal();
       }
     };
 
@@ -46,7 +46,7 @@ const ProductModal = () => {
     setBookingData(formData); //Sending form data to context
     setFormData({ name: "", date: "", startTime: "", endTime: "" }); // Resetting form data
     console.log("Form submitted:", formData);
-    toggleModal(); 
+    toggleModal();
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -64,7 +64,7 @@ const ProductModal = () => {
         >
           <div className="relative p-4 w-full max-w-md">
             <div className="bg-white rounded-lg shadow dark:bg-gray-700">
-      
+
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Book Your Seat
@@ -91,7 +91,7 @@ const ProductModal = () => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
-
+       {/* FORM MODAL POPUP */}
               <form className="p-4 md:p-5" onSubmit={handleSubmit}>
                 <div className="grid gap-4 mb-4 grid-cols-2">
                   <div className="col-span-2">
@@ -136,9 +136,9 @@ const ProductModal = () => {
                     >
                       Start Time
                     </label>
-                    <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                   value={formData.startTime}
-                   onChange={handleChange} name="startTime" id="startTime" >
+                    <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      value={formData.startTime}
+                      onChange={handleChange} name="startTime" id="startTime" >
                       <option value="" disabled>Select start time</option>
                       {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
@@ -154,15 +154,15 @@ const ProductModal = () => {
                         End Time
                       </label>
                       <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                       value={formData.endTime}
-                       onChange={handleChange} id="endTime" name="endTime">
-                      <option value="" disabled>Select start time</option>
-                      {timeOptions.map((time, index) => (
-                        <option key={index} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
+                        value={formData.endTime}
+                        onChange={handleChange} id="endTime" name="endTime">
+                        <option value="" disabled>Select start time</option>
+                        {timeOptions.map((time, index) => (
+                          <option key={index} value={time}>
+                            {time}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>
