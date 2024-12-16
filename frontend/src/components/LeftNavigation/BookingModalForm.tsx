@@ -47,7 +47,7 @@ const ProductModal = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setBookingData(formData); //Sending form data to context
-    setFormData({ name: "", date: "", startTime: "", endTime: "" }); // Resetting form data
+    setFormData({ name: "", date: "", startTime: "", endTime: "" }); 
     console.log("Form submitted:", formData);
     toggleModal();
     setShowSuccess(true);
