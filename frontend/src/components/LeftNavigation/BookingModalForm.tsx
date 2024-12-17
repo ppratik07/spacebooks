@@ -47,7 +47,6 @@ const ProductModal = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setBookingData(formData); //Sending form data to context
-    setFormData({ name: "", date: "", startTime: "", endTime: "" }); 
     console.log("Form submitted:", formData);
     toggleModal();
     setShowSuccess(true);
@@ -66,9 +65,12 @@ const ProductModal = () => {
       {showSuccess && (
         <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <ConfirmationPage />
+            <ConfirmationPage name= {formData.name} date={formData.date} startTime={formData.startTime} endTime={formData.endTime}/>
             <button
-              onClick={() => setShowSuccess(false)} // Close the popup
+              onClick={() => {
+                setShowSuccess(false); 
+                setFormData({ name: "", date: "", startTime: "", endTime: "" }); 
+              }}            
               className="mt-4 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
             >
               Close
