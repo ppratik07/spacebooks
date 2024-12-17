@@ -25,13 +25,12 @@ export const ConfirmationPage: React.FC = () => {
 
              
                     <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                        Payment successful
+                       Your Desk is booked !
                     </h2>
 
                 
                     <p className="text-gray-500 mb-6">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
-                        amet labore.
+                       You'll receive a confirmation email with your booking details !
                     </p>
 
            
