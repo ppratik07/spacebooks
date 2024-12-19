@@ -64,16 +64,17 @@ const ProductModal = () => {
     <div>
       {showSuccess && (
         <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <ConfirmationPage name= {formData.name} date={formData.date} startTime={formData.startTime} endTime={formData.endTime}/>
-            <button
-              onClick={() => {
-                setShowSuccess(false); 
-                setFormData({ name: "", date: "", startTime: "", endTime: "" }); 
-              }}            
-              className="mt-4 px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
-            >
-              Close
+          <div className="p-6 rounded-lg shadow-md">
+            <ConfirmationPage name={formData.name} date={formData.date} startTime={formData.startTime} endTime={formData.endTime} />
+
+            <button onClick={() => {
+              setShowSuccess(false);
+              setFormData({ name: "", date: "", startTime: "", endTime: "" });
+            }} type="button" className="bg-white rounded-md -mt-[21rem] ml-[35rem] flex text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+              <span className="sr-only">Close menu</span>
+              <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
         </div>
@@ -193,7 +194,7 @@ const ProductModal = () => {
                   Book Desk
                 </button>
               </form>
-            
+
             </div>
           </div>
         </div>
