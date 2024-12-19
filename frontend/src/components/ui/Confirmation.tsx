@@ -6,10 +6,15 @@ interface ConfirmationProps {
   }
 
 export const ConfirmationPage: React.FC<ConfirmationProps> = ({name,date,startTime,endTime,}) => {
+    const formatDate = (dateStr : string)=>{
+        const dateObj  = new Date(dateStr);
+        const formattedDate = dateObj.toLocaleDateString("en-GB");
+        return formattedDate.replace(/\//g, "-");
+    }
     return (
         <div>
             <div className="flex items-center justify-center">
-                <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg text-center">
+                <div className="w-full max-w-md p-4 bg-white rounded-lg shadow-lg text-center -mt-40 ml-40">
 
                     <div className="flex items-center justify-center mb-6">
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -41,7 +46,8 @@ export const ConfirmationPage: React.FC<ConfirmationProps> = ({name,date,startTi
                     </p>
 
                     <p className="text-gray-500 mb-6">
-                        {date},{startTime}-{endTime}
+                        Date : {formatDate(date)}<br/>
+                        Time : {startTime}-{endTime}
                     </p>
                     <button className="w-full py-3 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300">
                         Go back to dashboard
