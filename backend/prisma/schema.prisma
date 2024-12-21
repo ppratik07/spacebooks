@@ -24,6 +24,7 @@ model User {
   updatedAt    DateTime      @updatedAt
   tokens       Token[]
   reservations Reservation[]
+  bookings Booking[]
 }
 
 model Seat {
@@ -62,6 +63,17 @@ model Token {
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Booking {
+  id Int  @id @default(autoincrement())
+  name String
+  date DateTime
+  startTime String
+  endTime String
+  userId Int
+  User User @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
 enum SeatStatus {
   available
   reserved
@@ -78,3 +90,4 @@ enum ReservationStatus {
   CONFIRMED
   CANCELLED
 }
+
