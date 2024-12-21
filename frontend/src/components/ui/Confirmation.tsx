@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 interface ConfirmationProps {
     name: string;
     date: string;
@@ -8,15 +6,11 @@ interface ConfirmationProps {
   }
 
 export const ConfirmationPage: React.FC<ConfirmationProps> = ({name,date,startTime,endTime,}) => {
-    const navigate = useNavigate();
 
     const formatDate = (dateStr : string)=>{
         const dateObj  = new Date(dateStr);
         const formattedDate = dateObj.toLocaleDateString("en-GB");
         return formattedDate.replace(/\//g, "-");
-    }
-    const handleRedirect = () =>{
-        navigate('/mybookings');
     }
     return (
         <div>
@@ -56,9 +50,6 @@ export const ConfirmationPage: React.FC<ConfirmationProps> = ({name,date,startTi
                         Date : {formatDate(date)}<br/>
                         Time : {startTime}-{endTime}
                     </p>
-                    <button onClick={handleRedirect} className="w-full py-3 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300">
-                      Go to My Bookings 
-                    </button>
                 </div>
             </div>
         </div>
