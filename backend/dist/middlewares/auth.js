@@ -1,7 +1,7 @@
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-const { JWTSECRET } = (_a = process.env.JWT_SECRET) !== null && _a !== void 0 ? _a : "secret";
+require("dotenv/config");
+const { JWTSECRET } = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
 const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
