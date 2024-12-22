@@ -7,7 +7,6 @@ const ProductModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const timeOptions = generateTimeOptions();
-
   const [formData, setFormData] = useState({
     name: localStorage.getItem("name") || "",
     date: "",
@@ -44,12 +43,35 @@ const ProductModal = () => {
     }
   }, [isOpen]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setBookingData(formData); //Sending form data to context
-    console.log("Form submitted:", formData);
+    const userId = localStorage.getItem("userID");
+    console.log(formData.endTime,formData.startTime,formData.name,formData.date,userId);
+    const response = await fetch("http://localhost:3000/bookings",{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body : JSON.stringify({ 
+        name: formData.name,
+        date: formData.date,
+        startTime: formData.startTime,
+        endTime: formData.endTime,
+        userId: userId
+      })
+    });
+    console.log(response.body);
+    const data = await response.json();
+    console.log(data);
     toggleModal();
-    setShowSuccess(true);
+    if(response.ok){
+      setShowSuccess(true);
+    }
+    else{
+      console.log(response.body);
+      console.error('Error saving booking');
+      alert("Error saving booking")
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -73,7 +95,7 @@ const ProductModal = () => {
             }} type="button" className="bg-white rounded-md -mt-[18rem] ml-[35.5rem] flex text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
               <span className="sr-only">Close menu</span>
               <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
