@@ -333,7 +333,20 @@ app.get('/bookings/:userId',async(req,res)=>{
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch bookings' });
   }
-})
+});
+
+//Delete user bookings
+app.delete('/bookings/:id',async(req,res)=>{
+  const{id} = req.params;
+  try {
+    await prisma.booking.delete({
+      where: {id : parseInt(id)}
+    });
+    res.status(200).json({message : "Booking Deleted Successfully"});
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete booking" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
