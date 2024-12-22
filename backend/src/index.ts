@@ -320,6 +320,19 @@ app.post('/bookings',async(req,res)=>{
   } catch (error) {
     res.status(500).json({error : 'Failed to Create Bookings'})
   }
+});
+
+//Fetch all the user bookings
+app.get('/bookings/:userId',async(req,res)=>{
+  const { userId } = req.params;
+  try {
+    const bookings = await prisma.booking.findMany({
+      where: { userId: parseInt(userId) },
+    });
+    res.status(200).send({message:"Fetched the bookings",bookings});
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
 })
 
 app.listen(PORT, () => {

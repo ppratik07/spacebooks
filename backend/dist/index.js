@@ -310,6 +310,19 @@ app.post('/bookings', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).json({ error: 'Failed to Create Bookings' });
     }
 }));
+//Fetch all the user bookings
+app.get('/bookings/:userId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    try {
+        const bookings = yield prisma.booking.findMany({
+            where: { userId: parseInt(userId) },
+        });
+        res.status(200).send({ message: "Fetched the bookings", bookings });
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to fetch bookings' });
+    }
+}));
 app.listen(PORT, () => {
     console.log(`app listening on ${PORT}`);
 });
