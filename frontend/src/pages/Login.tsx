@@ -28,6 +28,7 @@ export const Login = () => {
 
             const data = await response.json();
             const name = data.name;
+            const responseduserID = data.userId;
             if (data.token) {
                 const token_expiration = Date.now() + 5 * 60 * 1000;
                 localStorage.setItem("token", data.token);
@@ -35,6 +36,7 @@ export const Login = () => {
                 localStorage.setItem('timeLeft', '300');
                 localStorage.setItem('timestamp', Date.now().toString());
                 localStorage.setItem("name",name);
+                localStorage.setItem("userID",responseduserID);
                 window.location = "/hamburger";
             } else {
                 alert("invalid credentials");

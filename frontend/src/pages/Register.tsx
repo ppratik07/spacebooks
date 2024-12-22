@@ -13,7 +13,7 @@ export const Register = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [name, setName] = useState<string>("");
-    const [MobileNumber, setMobileNumber] = useState<string>("");
+    const [mobilenumber, setMobileNumber] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
     return <div>
@@ -39,7 +39,7 @@ export const Register = () => {
                     }} />
                 </div>
                 <div>
-                    <InputBox label={"Mobile Number"} id={"mobilenumber"} type={"number"} value={MobileNumber} onChange={(e) => {
+                    <InputBox label={"Mobile Number"} id={"mobilenumber"} type={"number"} value={mobilenumber} onChange={(e) => {
                         setMobileNumber(e.target.value);
                     }} />
                 </div>
