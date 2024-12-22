@@ -15,6 +15,7 @@ import multer from "multer";
 import csv from "csv-parser";
 import fs from "fs";
 import path from "path";
+import 'dotenv/config';
 
 const PORT = 3000;
 const upload = multer({ dest: "uploads/" });
@@ -28,7 +29,7 @@ const prisma = new PrismaClient();
 const generateOTP = () => {
   return crypto.randomBytes(3).toString("hex"); // Generate a 6-character OTP
 };
-
+//Email Send 
 const sendEmail = async (email: string, subject: string, html: string) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
@@ -45,7 +46,7 @@ const sendEmail = async (email: string, subject: string, html: string) => {
     html: html,
   });
 };
-//Endpoints
+//Signup Endpoints
 app.post("/signup", async (req, res) => {
   const parsedInput = register.safeParse(req.body);
   if (!parsedInput.success) {
@@ -69,19 +70,21 @@ app.post("/signup", async (req, res) => {
         username: req.body.username,
         password: req.body.password,
         name: req.body.name,
+        phoneNumber : req.body?.mobilenumber
       },
     });
     const token = await jwt.sign({ id: newUser.id }, process.env.JWT_SECRET);
     return res.status(200).json({
       message: "User created successfully",
       jwt: token,
+      userId : newUser.id
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
   }
 });
-
+//SignIn Endpoint for user
 app.post("/signin", async (req, res) => {
   const { username, password } = req.body;
   const getUser = await prisma.user.findUnique({
@@ -99,10 +102,11 @@ app.post("/signin", async (req, res) => {
   return res.status(200).json({
     message: "User signed in successfully",
     name: getUser?.name,
+    userId : getUser?.id,
     token
   });
 });
-
+//Request OTP when resetting the password
 app.post("/api/request-otp", async (req, res) => {
   const { success } = resetpassword.safeParse(req.body);
   const { email } = req.body;
@@ -148,7 +152,7 @@ app.post("/reset-password/:token", async (req, res) => {
     res.status(500).send("Error resetting password");
   }
 });
-
+//Reset Password Endpoint for User
 app.post("/reset-password", async (req, res) => {
   const { email, otp, newPassword } = req.body;
   try {
@@ -294,64 +298,30 @@ app.post("/api/reserve", async (req, res) => {
     res.status(500).send({ error: "Error reserving seats" });
   }
 });
-app.post('/upload-csv', upload.single('file'), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
-  }
 
-  const { eventId } = req.body;
-  if (!eventId) {
-    return res.status(400).json({ message: 'Event ID is required' });
-  }
-
-  const filePath = path.join(__dirname, req.file.path);
-
-  const seatsData: any[] = [];
-
-  fs.createReadStream(filePath)
-    .pipe(csv())
-    .on('data', (row) => {
-      seatsData.push({
-        label: row.label,
-        x: parseInt(row.x, 10),
-        y: parseInt(row.y, 10),
-        row: row.row ? parseInt(row.row, 10) : null,
-        column: row.column ? parseInt(row.column, 10) : null,
-        status: 'available' 
-      });
-    })
-    .on('end', async () => {
-      try {
-        await prisma.seat.createMany({
-          data: seatsData.map(seat => ({
-            ...seat,
-            eventId: Number(eventId) 
-          })),
-        });
-
-        fs.unlinkSync(filePath);
-
-        res.json({ message: 'CSV processed and seats created successfully' });
-      } catch (error) {
-        console.error('Error processing CSV:', error);
-        res.status(500).json({ message: 'Error processing CSV' });
-      }
-    });
-});
-app.get('/event/:eventId/seats', async (req, res) => {
-  const { eventId } = req.params;
-
+//Booking form submission
+app.post('/bookings',async(req,res)=>{
+  const{name,date,startTime, endTime, userId } = req.body;
+  console.log(req.body);
   try {
-    const seats = await prisma.seat.findMany({
-      where: { eventId: Number(eventId) },
-      orderBy: [{ row: 'asc' }, { column: 'asc' }],
+    const bookings = await prisma.booking.create({
+        data : {
+           name,
+           date: date,
+           startTime,
+           endTime,
+           userId : parseInt(userId)
+        },
     });
-    res.json(seats);
+    console.log(bookings.userId);
+    res
+      .status(200)
+      .send({ message: "Seats reserved successfully",bookings });
   } catch (error) {
-    console.error('Error fetching seats:', error);
-    res.status(500).json({ message: 'Error fetching seats' });
+    res.status(500).json({error : 'Failed to Create Bookings'})
   }
-});
+})
+
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
 });

@@ -23,9 +23,7 @@ const cors = require("cors");
 const app = (0, express_1.default)();
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const multer_1 = __importDefault(require("multer"));
-const csv_parser_1 = __importDefault(require("csv-parser"));
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
+require("dotenv/config");
 const PORT = 3000;
 const upload = (0, multer_1.default)({ dest: "uploads/" });
 app.use(cors());
@@ -35,6 +33,7 @@ const prisma = new client_1.PrismaClient();
 const generateOTP = () => {
     return crypto_1.default.randomBytes(3).toString("hex"); // Generate a 6-character OTP
 };
+//Email Send 
 const sendEmail = (email, subject, html) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
         service: "Gmail",
@@ -50,9 +49,9 @@ const sendEmail = (email, subject, html) => __awaiter(void 0, void 0, void 0, fu
         html: html,
     });
 });
-//Endpoints
+//Signup Endpoints
 app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     const parsedInput = Register_1.register.safeParse(req.body);
     if (!parsedInput.success) {
         res.status(411).json({
@@ -75,12 +74,14 @@ app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 username: req.body.username,
                 password: req.body.password,
                 name: req.body.name,
+                phoneNumber: (_c = req.body) === null || _c === void 0 ? void 0 : _c.mobilenumber
             },
         });
         const token = yield jwt.sign({ id: newUser.id }, process.env.JWT_SECRET);
         return res.status(200).json({
             message: "User created successfully",
             jwt: token,
+            userId: newUser.id
         });
     }
     catch (error) {
@@ -88,6 +89,7 @@ app.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(500).json({ error: "Internal server error" });
     }
 }));
+//SignIn Endpoint for user
 app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     const getUser = yield prisma.user.findUnique({
@@ -105,9 +107,11 @@ app.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     return res.status(200).json({
         message: "User signed in successfully",
         name: getUser === null || getUser === void 0 ? void 0 : getUser.name,
+        userId: getUser === null || getUser === void 0 ? void 0 : getUser.id,
         token
     });
 }));
+//Request OTP when resetting the password
 app.post("/api/request-otp", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { success } = ResetPassword_1.resetpassword.safeParse(req.body);
     const { email } = req.body;
@@ -148,6 +152,7 @@ app.post("/reset-password/:token", (req, res) => __awaiter(void 0, void 0, void 
         res.status(500).send("Error resetting password");
     }
 }));
+//Reset Password Endpoint for User
 app.post("/reset-password", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, otp, newPassword } = req.body;
     try {
@@ -282,54 +287,27 @@ app.post("/api/reserve", (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(500).send({ error: "Error reserving seats" });
     }
 }));
-app.post('/upload-csv', upload.single('file'), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
-    const { eventId } = req.body;
-    if (!eventId) {
-        return res.status(400).json({ message: 'Event ID is required' });
-    }
-    const filePath = path_1.default.join(__dirname, req.file.path);
-    const seatsData = [];
-    fs_1.default.createReadStream(filePath)
-        .pipe((0, csv_parser_1.default)())
-        .on('data', (row) => {
-        seatsData.push({
-            label: row.label,
-            x: parseInt(row.x, 10),
-            y: parseInt(row.y, 10),
-            row: row.row ? parseInt(row.row, 10) : null,
-            column: row.column ? parseInt(row.column, 10) : null,
-            status: 'available'
-        });
-    })
-        .on('end', () => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            yield prisma.seat.createMany({
-                data: seatsData.map(seat => (Object.assign(Object.assign({}, seat), { eventId: Number(eventId) }))),
-            });
-            fs_1.default.unlinkSync(filePath);
-            res.json({ message: 'CSV processed and seats created successfully' });
-        }
-        catch (error) {
-            console.error('Error processing CSV:', error);
-            res.status(500).json({ message: 'Error processing CSV' });
-        }
-    }));
-}));
-app.get('/event/:eventId/seats', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { eventId } = req.params;
+//Booking form submission
+app.post('/bookings', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, date, startTime, endTime, userId } = req.body;
+    console.log(req.body);
     try {
-        const seats = yield prisma.seat.findMany({
-            where: { eventId: Number(eventId) },
-            orderBy: [{ row: 'asc' }, { column: 'asc' }],
+        const bookings = yield prisma.booking.create({
+            data: {
+                name,
+                date: date,
+                startTime,
+                endTime,
+                userId: parseInt(userId)
+            },
         });
-        res.json(seats);
+        console.log(bookings.userId);
+        res
+            .status(200)
+            .send({ message: "Seats reserved successfully", bookings });
     }
     catch (error) {
-        console.error('Error fetching seats:', error);
-        res.status(500).json({ message: 'Error fetching seats' });
+        res.status(500).json({ error: 'Failed to Create Bookings' });
     }
 }));
 app.listen(PORT, () => {
