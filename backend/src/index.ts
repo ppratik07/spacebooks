@@ -348,6 +348,23 @@ app.delete('/bookings/:id',async(req,res)=>{
   }
 });
 
+// Update user bookings 
+app.put('/bookings/:id',async(req,res)=>{
+    const { id } = req.params;
+    const{name,date,startTime,endTime} = req.body;
+    try {
+      const updatedBookings = await prisma.booking.update({
+        where: {id : parseInt(id)},
+        data : {
+          name, date,startTime,endTime
+        },
+      });
+      res.status(200).json({message : "Bookings updated Successfully",updatedBookings})
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update booking" });
+    }
+});
+
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
 });

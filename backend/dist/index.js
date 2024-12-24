@@ -336,6 +336,23 @@ app.delete('/bookings/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(500).json({ error: "Failed to delete booking" });
     }
 }));
+// Update user bookings 
+app.put('/bookings/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { name, date, startTime, endTime } = req.body;
+    try {
+        const updatedBookings = yield prisma.booking.update({
+            where: { id: parseInt(id) },
+            data: {
+                name, date, startTime, endTime
+            },
+        });
+        res.status(200).json({ message: "Bookings updated Successfully", updatedBookings });
+    }
+    catch (error) {
+        res.status(500).json({ error: "Failed to update booking" });
+    }
+}));
 app.listen(PORT, () => {
     console.log(`app listening on ${PORT}`);
 });
