@@ -49,6 +49,27 @@ export const MyBookings = () => {
             alert("Error deleting");
         }
     };
+
+    const editBooking = async (id: number, updatedData: Partial<Booking>) => {
+        try {
+            const response = await fetch("http://localhost:3000/bookings/${id}", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updatedData),
+            });
+            if (response.ok) {
+                const updatedBooking = await response.json();
+                setBookings((prev) =>
+                    prev.map((booking) =>
+                        booking.id === id ? { ...booking, ...updatedBooking.updatedBooking } : booking
+                    )
+                );
+            }
+        } catch (error) {
+            console.error("Error updating booking:", error);
+        }
+    }
+
     if (loading) {
         return <div className="text-center">Loading...</div>;
     }
@@ -86,12 +107,16 @@ export const MyBookings = () => {
                                     </p>
                                 </div>
                                 <div className="flex mt-4 space-x-2">
-                                    <button 
+                                    <button onClick={() => editBooking(booking.id, {
+                                        date: booking.date,
+                                        startTime: booking.startTime,
+                                        endTime: booking.endTime
+                                    })}
                                         className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
                                     >
                                         Edit
                                     </button>
-                                    <button onClick={()=>deleteBooking(booking.id)}
+                                    <button onClick={() => deleteBooking(booking.id)}
                                         className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700"
                                     >
                                         Delete
