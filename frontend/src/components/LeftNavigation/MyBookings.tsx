@@ -9,8 +9,8 @@ interface Booking {
 }
 export const MyBookings = () => {
     //const { bookingData } = useBooking(); // for context 
-    const userName = localStorage.getItem("name"); // Get user name
-    const userId = localStorage.getItem("userID"); // Get user ID from local storage
+    const userName = localStorage.getItem("name"); 
+    const userId = localStorage.getItem("userID");
     const [bookings, setBookings] = useState<Booking[]>([]); // Store fetched bookings
     const [loading, setLoading] = useState(true);
 
