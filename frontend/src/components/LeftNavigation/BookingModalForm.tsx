@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { generateTimeOptions } from "../../helpers/TimeOptions";
-import { useBooking } from "../Context/BookingContext";
+// import { useBooking } from "../Context/BookingContext";
 import { ConfirmationPage } from "../ui/Confirmation";
 
 const ProductModal = () => {
@@ -13,7 +13,7 @@ const ProductModal = () => {
     startTime: "",
     endTime: "",
   });
-  const { setBookingData } = useBooking();
+  // const { setBookingData } = useBooking();
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
