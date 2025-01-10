@@ -7,6 +7,8 @@ const ProductModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const timeOptions = generateTimeOptions();
+  const[editing,setIsEditing] = useState(false);
+
   const [formData, setFormData] = useState({
     name: localStorage.getItem("name") || "",
     date: "",
