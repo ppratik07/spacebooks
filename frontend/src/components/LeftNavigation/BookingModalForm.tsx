@@ -7,7 +7,7 @@ const ProductModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const timeOptions = generateTimeOptions();
-  const[editing,setIsEditing] = useState(false);
+
 
   const [formData, setFormData] = useState({
     name: localStorage.getItem("name") || "",
@@ -47,8 +47,20 @@ const ProductModal = () => {
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!formData.startTime || !formData.endTime) {
+      alert("Please select both start and end times.");
+      return;
+    }
+
+    if (formData.endTime <= formData.startTime) {
+      alert("End time must be after start time.");
+      return;
+    }
+
     const userId = localStorage.getItem("userID");
     console.log(formData.endTime,formData.startTime,formData.name,formData.date,userId);
+    
     const response = await fetch("http://localhost:3000/bookings",{
       method: 'POST',
       headers: {
