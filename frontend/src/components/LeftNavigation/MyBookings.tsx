@@ -13,7 +13,8 @@ export const MyBookings = () => {
     const userId = localStorage.getItem("userID");
     const [bookings, setBookings] = useState<Booking[]>([]); // Store fetched bookings
     const [loading, setLoading] = useState(true);
-
+    const [isEditing, setIsEditing] = useState(false); 
+    const [editData, setEditData] = useState<Booking | null>(null);
     useEffect(() => {
         const fetchBookings = async () => {
             try {
@@ -50,7 +51,12 @@ export const MyBookings = () => {
         }
     };
 
-    const editBooking = async (id: number, updatedData: Partial<Booking>) => {
+    const handleEdit = (booking : Booking)=>{
+        setEditData(booking);
+        setIsEditing(true);
+    }
+
+    const handleSave = async (id: number, updatedData: Partial<Booking>) => {
         try {
             const response = await fetch("http://localhost:3000/bookings/${id}", {
                 method: "PUT",
@@ -61,7 +67,7 @@ export const MyBookings = () => {
                 const updatedBooking = await response.json();
                 setBookings((prev) =>
                     prev.map((booking) =>
-                        booking.id === id ? { ...booking, ...updatedBooking.updatedBooking } : booking
+                        booking.id === updatedData.id ? { ...booking, ...updatedBooking.updatedBooking } : booking
                     )
                 );
             }
@@ -107,11 +113,7 @@ export const MyBookings = () => {
                                     </p>
                                 </div>
                                 <div className="flex mt-4 space-x-2">
-                                    <button onClick={() => editBooking(booking.id, {
-                                        date: booking.date,
-                                        startTime: booking.startTime,
-                                        endTime: booking.endTime
-                                    })}
+                                    <button onClick={()=> handleEdit(booking)}
                                         className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
                                     >
                                         Edit
