@@ -15,6 +15,7 @@ export const MyBookings = () => {
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState<Booking | null>(null);
+    
     useEffect(() => {
         const fetchBookings = async () => {
             try {
@@ -158,6 +159,7 @@ export const MyBookings = () => {
                                     type="text"
                                     id="name"
                                     value={editData.name}
+                                    disabled
                                     onChange={(e) =>
                                         setEditData({ ...editData, name: e.target.value })
                                     }
