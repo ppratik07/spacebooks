@@ -352,6 +352,7 @@ app.delete('/bookings/:id',async(req,res)=>{
 app.put('/bookings/:id',async(req,res)=>{
     const { id } = req.params;
     const{date,startTime,endTime} = req.body;
+    console.log(req.body);
     try {
       const updatedBookings = await prisma.booking.update({
         where: {id : parseInt(id)},
@@ -359,6 +360,7 @@ app.put('/bookings/:id',async(req,res)=>{
          date,startTime,endTime
         },
       });
+      console.log(updatedBookings);
       res.status(200).json({message : "Bookings updated Successfully",updatedBookings})
     } catch (error) {
       res.status(500).json({ error: "Failed to update booking" });

@@ -339,14 +339,16 @@ app.delete('/bookings/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
 // Update user bookings 
 app.put('/bookings/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name, date, startTime, endTime } = req.body;
+    const { date, startTime, endTime } = req.body;
+    console.log(req.body);
     try {
         const updatedBookings = yield prisma.booking.update({
             where: { id: parseInt(id) },
             data: {
-                name, date, startTime, endTime
+                date, startTime, endTime
             },
         });
+        console.log(updatedBookings);
         res.status(200).json({ message: "Bookings updated Successfully", updatedBookings });
     }
     catch (error) {
