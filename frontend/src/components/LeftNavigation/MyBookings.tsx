@@ -65,6 +65,7 @@ export const MyBookings = () => {
     }
 
     const handleSave = async (id: number, updatedData: Partial<Booking>) => {
+        setLoading(true);
         const updatedBookingData = {
             ...updatedData,
             startTime: updatedData.startTime ? convertToAMPM(updatedData.startTime) : undefined,
@@ -93,6 +94,11 @@ export const MyBookings = () => {
         } catch (error) {
             console.error("Error updating booking:", error);
             alert("An error occurred while updating the booking.");
+        }finally {
+            
+            setTimeout(() => {
+                setLoading(false);
+            }, 2000);
         }
     }
 
