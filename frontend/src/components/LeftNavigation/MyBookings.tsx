@@ -9,11 +9,11 @@ interface Booking {
 }
 export const MyBookings = () => {
     //const { bookingData } = useBooking(); // for context 
-    const userName = localStorage.getItem("name"); 
+    const userName = localStorage.getItem("name");
     const userId = localStorage.getItem("userID");
     const [bookings, setBookings] = useState<Booking[]>([]); // Store fetched bookings
     const [loading, setLoading] = useState(true);
-    const [isEditing, setIsEditing] = useState(false); 
+    const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState<Booking | null>(null);
     useEffect(() => {
         const fetchBookings = async () => {
@@ -51,14 +51,14 @@ export const MyBookings = () => {
         }
     };
 
-    const handleEdit = (booking : Booking)=>{
+    const handleEdit = (booking: Booking) => {
         setEditData(booking);
         setIsEditing(true);
     }
 
     const handleSave = async (id: number, updatedData: Partial<Booking>) => {
         try {
-            const response = await fetch("http://localhost:3000/bookings/${id}", {
+            const response = await fetch(`http://localhost:3000/bookings/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updatedData),
@@ -113,7 +113,7 @@ export const MyBookings = () => {
                                     </p>
                                 </div>
                                 <div className="flex mt-4 space-x-2">
-                                    <button onClick={()=> handleEdit(booking)}
+                                    <button onClick={() => handleEdit(booking)}
                                         className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
                                     >
                                         Edit
@@ -135,6 +135,78 @@ export const MyBookings = () => {
                     </div>
                 )}
             </div>
+            {/* Show the form if we are editing */}
+            {isEditing && editData && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+                        <h2 className="text-2xl mb-4">Edit Booking</h2>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                if (editData) {
+                                    handleSave(editData.id, {
+                                        name: editData.name,
+                                        startTime: editData.startTime,
+                                        endTime: editData.endTime,
+                                    });
+                                }
+                            }}
+                        >
+                            <div className="mb-4">
+                                <label htmlFor="name" className="block text-gray-700">Name</label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    value={editData.name}
+                                    onChange={(e) =>
+                                        setEditData({ ...editData, name: e.target.value })
+                                    }
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label htmlFor="startTime" className="block text-gray-700">Start Time</label>
+                                <input
+                                    type="time"
+                                    id="startTime"
+                                    value={editData.startTime}
+                                    onChange={(e) =>
+                                        setEditData({ ...editData, startTime: e.target.value })
+                                    }
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label htmlFor="endTime" className="block text-gray-700">End Time</label>
+                                <input
+                                    type="time"
+                                    id="endTime"
+                                    value={editData.endTime}
+                                    onChange={(e) =>
+                                        setEditData({ ...editData, endTime: e.target.value })
+                                    }
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
+                            <div className="flex justify-between">
+                                <button
+                                    type="submit"
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+                                >
+                                    Save
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditing(false)}
+                                    className="bg-gray-500 text-white px-4 py-2 rounded-lg"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
