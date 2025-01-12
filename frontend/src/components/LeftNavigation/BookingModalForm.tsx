@@ -8,14 +8,12 @@ const ProductModal = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const timeOptions = generateTimeOptions();
 
-
   const [formData, setFormData] = useState({
     name: localStorage.getItem("name") || "",
     date: "",
     startTime: "",
     endTime: "",
   });
-  // const { setBookingData } = useBooking();
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -45,7 +43,7 @@ const ProductModal = () => {
     }
   }, [isOpen]);
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!formData.startTime || !formData.endTime) {
@@ -59,37 +57,36 @@ const ProductModal = () => {
     }
 
     const userId = localStorage.getItem("userID");
-    console.log(formData.endTime,formData.startTime,formData.name,formData.date,userId);
-    
-    const response = await fetch("http://localhost:3000/bookings",{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body : JSON.stringify({ 
-        name: formData.name,
-        date: formData.date,
-        startTime: formData.startTime,
-        endTime: formData.endTime,
-        userId: userId
-      })
-    });
-    console.log(response.body);
-    const data = await response.json();
-    console.log(data);
-    toggleModal();
-    if(response.ok){
-      setShowSuccess(true);
-    }
-    else{
-      console.log(response.body);
-      console.error('Error saving booking');
-      alert("Error saving booking")
+    try {
+      const response = await fetch("http://localhost:3000/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          date: formData.date,
+          startTime: formData.startTime,
+          endTime: formData.endTime,
+          userId: userId,
+        }),
+      });
+
+      if (response.ok) {
+        setShowSuccess(true);
+        toggleModal();
+      } else {
+        alert("Error saving booking");
+      }
+    } catch (error) {
+      console.error("Error saving booking:", error);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+
+    // Update formData and ensure dependent values update immediately in the UI
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -101,27 +98,44 @@ const ProductModal = () => {
       {showSuccess && (
         <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50">
           <div className="p-6 rounded-lg shadow-md">
-            <ConfirmationPage name={formData.name} date={formData.date} startTime={formData.startTime} endTime={formData.endTime} />
-
-            <button onClick={() => {
-              setShowSuccess(false);
-              setFormData({ name: "", date: "", startTime: "", endTime: "" });
-            }} type="button" className="bg-white rounded-md -mt-[18rem] ml-[35.5rem] flex text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+            <ConfirmationPage
+              name={formData.name}
+              date={formData.date}
+              startTime={formData.startTime}
+              endTime={formData.endTime}
+            />
+            <button
+              onClick={() => {
+                setShowSuccess(false);
+                setFormData({ name: "", date: "", startTime: "", endTime: "" });
+              }}
+              type="button"
+              className="bg-white rounded-md -mt-[18rem] ml-[35.5rem] flex text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+            >
               <span className="sr-only">Close menu</span>
-              <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
         </div>
       )}
       {isOpen && (
-        <div
-          className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50"
-        >
+        <div className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50">
           <div className="relative p-4 w-full max-w-md">
             <div className="bg-white rounded-lg shadow dark:bg-gray-700">
-
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Book Your Seat
@@ -148,9 +162,9 @@ const ProductModal = () => {
                   <span className="sr-only">Close modal</span>
                 </button>
               </div>
-              {/* FORM MODAL POPUP */}
               <form className="p-4 md:p-5" onSubmit={handleSubmit}>
                 <div className="grid gap-4 mb-4 grid-cols-2">
+                  {/* Name Input */}
                   <div className="col-span-2">
                     <label
                       htmlFor="name"
@@ -169,6 +183,7 @@ const ProductModal = () => {
                       required
                     />
                   </div>
+                  {/* Date Input */}
                   <div className="col-span-2">
                     <label
                       htmlFor="date"
@@ -180,47 +195,61 @@ const ProductModal = () => {
                       type="text"
                       name="date"
                       id="date"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       value={formData.date}
                       onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                       required
                     />
                   </div>
+                  {/* Start Time */}
                   <div className="col-span-2">
                     <label
-                      htmlFor="starttime"
+                      htmlFor="startTime"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Start Time
                     </label>
-                    <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    <select
+                      name="startTime"
+                      id="startTime"
                       value={formData.startTime}
-                      onChange={handleChange} name="startTime" id="startTime" >
-                      <option value="" disabled>Select start time</option>
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    >
+                      <option value="" disabled>
+                        Select start time
+                      </option>
                       {timeOptions.map((time, index) => (
                         <option key={index} value={time}>
                           {time}
                         </option>
                       ))}
                     </select>
-                    <div className="col-span-2">
-                      <label
-                        htmlFor="name"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >
-                        End Time
-                      </label>
-                      <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        value={formData.endTime}
-                        onChange={handleChange} id="endTime" name="endTime">
-                        <option value="" disabled>Select start time</option>
-                        {timeOptions.map((time, index) => (
-                          <option key={index} value={time}>
-                            {time}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                  </div>
+                  {/* End Time */}
+                  <div className="col-span-2">
+                    <label
+                      htmlFor="endTime"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      End Time
+                    </label>
+                    <select
+                      name="endTime"
+                      id="endTime"
+                      value={formData.endTime}
+                      onChange={handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    >
+                      <option value="" disabled>
+                        Select end time
+                      </option>
+                      {timeOptions.map((time, index) => (
+                        <option key={index} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <button
@@ -230,12 +259,10 @@ const ProductModal = () => {
                   Book Desk
                 </button>
               </form>
-
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 };
