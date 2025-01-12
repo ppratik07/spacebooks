@@ -16,6 +16,13 @@ export const MyBookings = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState<Booking | null>(null);
     
+    const convertToAMPM = (time: string): string => {
+        const [hour, minute] = time.split(":").map(Number);
+        const ampm = hour >= 12 ? "PM" : "AM";
+        const formattedHour = hour % 12 || 12; // Convert 0 to 12 for AM/PM
+        return `${formattedHour}:${minute.toString().padStart(2, "0")} ${ampm}`;
+    };
+
     useEffect(() => {
         const fetchBookings = async () => {
             try {
@@ -58,11 +65,17 @@ export const MyBookings = () => {
     }
 
     const handleSave = async (id: number, updatedData: Partial<Booking>) => {
+        const updatedBookingData = {
+            ...updatedData,
+            startTime: updatedData.startTime ? convertToAMPM(updatedData.startTime) : undefined,
+            endTime: updatedData.endTime ? convertToAMPM(updatedData.endTime) : undefined,
+        };
+
         try {
             const response = await fetch(`http://localhost:3000/bookings/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedData),
+                body: JSON.stringify(updatedBookingData),
             });
             if (response.ok) {
                 const updatedBooking = await response.json();
@@ -71,9 +84,15 @@ export const MyBookings = () => {
                         booking.id === updatedData.id ? { ...booking, ...updatedBooking.updatedBooking } : booking
                     )
                 );
+                alert("Booking Updated Successfully!");
+                setIsEditing(false);
+            }
+            else{
+                alert("Failed to Update Booking");
             }
         } catch (error) {
             console.error("Error updating booking:", error);
+            alert("An error occurred while updating the booking.");
         }
     }
 
