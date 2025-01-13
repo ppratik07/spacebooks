@@ -95,7 +95,7 @@ export const MyBookings = () => {
             console.error("Error updating booking:", error);
             alert("An error occurred while updating the booking.");
         }finally {
-            
+
             setTimeout(() => {
                 setLoading(false);
             }, 2000);
@@ -211,6 +211,18 @@ export const MyBookings = () => {
                                     value={editData.endTime}
                                     onChange={(e) =>
                                         setEditData({ ...editData, endTime: e.target.value })
+                                    }
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label htmlFor="Date" className="block text-gray-700">Date</label>
+                                <input
+                                    type="date"
+                                    id="date"
+                                    value={editData.date}
+                                    onChange={(e) =>
+                                        setEditData({ ...editData, date: e.target.value })
                                     }
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md"
                                 />
