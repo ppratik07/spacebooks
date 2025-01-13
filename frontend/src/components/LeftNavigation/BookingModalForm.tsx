@@ -86,7 +86,6 @@ const ProductModal = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    // Update formData and ensure dependent values update immediately in the UI
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
