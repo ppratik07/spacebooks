@@ -70,6 +70,7 @@ export const MyBookings = () => {
             ...updatedData,
             startTime: updatedData.startTime ? convertToAMPM(updatedData.startTime) : undefined,
             endTime: updatedData.endTime ? convertToAMPM(updatedData.endTime) : undefined,
+            date: updatedData.date
         };
 
         try {
