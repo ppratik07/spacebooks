@@ -1,3 +1,4 @@
+import { LogoHeader } from "../components/Landing/LogoHeading";
 
 export const ContactUsPage = () => {
   return (
@@ -9,8 +10,9 @@ export const ContactUsPage = () => {
         backgroundPosition: "center",
       }}
     >
+
       {/* Overlay for better readability */}
-      <div className="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
+      <div className="absolute inset-0 bg-gray-900 bg-opacity-50"> <LogoHeader /></div>
 
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-gray-200">
@@ -167,6 +169,7 @@ export const ContactUsPage = () => {
         </div>
       </div>
     </section>
+
   );
 };
 
