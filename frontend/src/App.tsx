@@ -11,12 +11,13 @@ import FloorPlan from './components/ui/FloorPlan';
 import {HamburgerMenu} from './pages/HamburgerMenu'
 import { MainPage } from './pages/_MainPage';
 import { MyBookings } from './components/LeftNavigation/MyBookings';
+import { ContactUsPage } from './pages/ContactUs';
 // import { ConfirmationPage } from './components/ui/Confirmation';
 // import { TestPage } from './components/Testpage;
 
 function AppContent() {
     const location = useLocation();
-    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/','/main','/hamburger','/mybookings','testpage','/confirmation'];
+    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/','/main','/hamburger','/mybookings','testpage','/confirmation','/contact-us'];
 
     return (
         <>
@@ -34,6 +35,7 @@ function AppContent() {
                 <Route path='/main' element={<MainPage/>}/>
                 <Route path='/hamburger' element={<HamburgerMenu/>}/>
                 <Route path='/mybookings' element={<MyBookings/>}/>
+                <Route path='/contact-us' element={<ContactUsPage/>}/>
                 {/* <Route path='/confirmation' element={<ConfirmationPage/>}/> */}
                 {/* <Route path='/testpage' element={<TestPage/>}/> */}
             </Routes>
