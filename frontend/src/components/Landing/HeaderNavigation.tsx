@@ -15,7 +15,7 @@ export const HeaderNavigation = () => {
                 <nav className="flex space-x-6">
                     <a href="#product" className="hover:text-blue-600">Product</a>
                     <a href="#community" className="hover:text-blue-600">Community</a>
-                    <a href="#plans" className="hover:text-blue-600">Plans</a>
+                    <a href="/contact-us" className="hover:text-blue-600">Plans</a>
                 </nav>
                 <div className="flex space-x-4">
                     <button onClick={handleSignIn} className="px-4 py-2 border rounded hover:bg-gray-100">Log In</button>
