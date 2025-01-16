@@ -1,4 +1,3 @@
-import React from "react";
 
 export const ContactUsPage = () => {
   return (
@@ -10,7 +9,7 @@ export const ContactUsPage = () => {
         backgroundPosition: "center",
       }}
     >
-    
+      {/* Overlay for better readability */}
       <div className="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
 
       {/* Content */}
@@ -119,6 +118,7 @@ export const ContactUsPage = () => {
                 />
               </svg>
               <p className="mt-2">Email us:</p>
+              <p className="mt-2">Email us for general queries, including marketing and partnership opportunities.</p>
               <p className="text-sm text-gray-400">name@flowbite.com</p>
             </div>
           </div>
@@ -139,6 +139,7 @@ export const ContactUsPage = () => {
                 />
               </svg>
               <p className="mt-2">Call us:</p>
+              <p className="mt-2">Call us to speak to a member of our team. We are always happy to help.</p>
               <p className="text-sm text-gray-400">+12 345 6789</p>
             </div>
           </div>
@@ -159,6 +160,7 @@ export const ContactUsPage = () => {
                 />
               </svg>
               <p className="mt-2">Support:</p>
+              <p className="mt-2">Email us for general queries, including marketing and partnership opportunities.</p>
               <p className="text-sm text-gray-400">support@flowbite.com</p>
             </div>
           </div>
