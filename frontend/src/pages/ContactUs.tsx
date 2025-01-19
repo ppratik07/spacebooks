@@ -1,6 +1,46 @@
+import { useRef, useState } from "react";
 import { LogoHeader } from "../components/Landing/LogoHeading";
+import emailjs from '@emailjs/browser'
 
+interface ContactUsInterface {
+  firstname: string,
+  lastname: string,
+  email: string,
+  phone: string,
+  message: string
+}
 export const ContactUsPage = () => {
+  const [data, setData] = useState<ContactUsInterface>({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    message: ""
+  })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    console.log(value);
+  }
+  const form = useRef();
+  const sendEmail = (e : React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    emailjs.sendForm('service_120mkys', 'template_6gkbtda', form.current, 'jEHKVcMHfeBQd2QUg')
+      .then((result) => {
+        console.log(result.text);
+        alert("Email has been sent. We'll be contacting in your email soon");
+        setData({ firstname: '',lastname:'', email: '',phone:'', message: '' });
+
+      }, (error) => {
+        console.log(error.text);
+        alert("Internal Sever Error. Please try again later!");
+      });
+  }
+
   return (
     <section
       className="relative bg-gray-900 py-16"
@@ -24,7 +64,7 @@ export const ContactUsPage = () => {
         </div>
 
         <div className="mt-12 max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-8">
-          <form>
+          <form ref={form} method="POST" onSubmit={sendEmail} >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="first-name" className="block text-sm font-medium">
@@ -32,9 +72,11 @@ export const ContactUsPage = () => {
                 </label>
                 <input
                   type="text"
-                  id="first-name"
-                  name="first-name"
+                  id="firstname"
+                  name="firstname"
                   placeholder="Bonnie"
+                  onChange={handleChange}
+                  required
                   className="mt-1 block w-full px-4 py-2 bg-gray-700 rounded-md border-gray-600 text-gray-200 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -44,9 +86,11 @@ export const ContactUsPage = () => {
                 </label>
                 <input
                   type="text"
-                  id="last-name"
-                  name="last-name"
+                  id="lastname"
+                  name="lastname"
                   placeholder="Green"
+                  onChange={handleChange}
+                  required
                   className="mt-1 block w-full px-4 py-2 bg-gray-700 rounded-md border-gray-600 text-gray-200 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
@@ -60,6 +104,7 @@ export const ContactUsPage = () => {
                   type="email"
                   id="email"
                   name="email"
+                  required
                   placeholder="name@flowbite.com"
                   className="mt-1 block w-full px-4 py-2 bg-gray-700 rounded-md border-gray-600 text-gray-200 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -72,6 +117,7 @@ export const ContactUsPage = () => {
                   type="tel"
                   id="phone"
                   name="phone"
+                  required
                   placeholder="+12 345 6789"
                   className="mt-1 block w-full px-4 py-2 bg-gray-700 rounded-md border-gray-600 text-gray-200 focus:ring-blue-500 focus:border-blue-500"
                 />
