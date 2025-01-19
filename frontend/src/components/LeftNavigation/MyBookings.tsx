@@ -201,7 +201,7 @@ export const MyBookings = () => {
                                     onChange={(e) =>
                                         setEditData({ ...editData, startTime: e.target.value })
                                     }
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md cursor-pointer"
                                 />
                             </div>
                             <div className="mb-4">
@@ -213,7 +213,7 @@ export const MyBookings = () => {
                                     onChange={(e) =>
                                         setEditData({ ...editData, endTime: e.target.value })
                                     }
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md cursor-pointer"
                                 />
                             </div>
                             <div className="mb-4">
@@ -222,6 +222,7 @@ export const MyBookings = () => {
                                     type="date"
                                     id="date"
                                     value={editData.date}
+                                    disabled
                                     onChange={(e) =>
                                         setEditData({ ...editData, date: e.target.value })
                                     }
