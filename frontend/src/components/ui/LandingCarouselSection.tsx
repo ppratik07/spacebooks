@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 export const LandingHeroSection = ()  =>{
     return (
         <div>
@@ -9,9 +11,12 @@ export const LandingHeroSection = ()  =>{
                     <p className="text-gray-600 mb-6">
                         Better experience of workplace scheduling
                     </p>
+                    <Link to="/contact-us">
                     <button className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
                         Try Free Trial
                     </button>
+                    </Link>
+                   
                 </div>
                 <div className="relative mt-10 md:mt-0">
                   
