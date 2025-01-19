@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import BookingModalForm from "./BookingModalForm";
 import { MyBookings } from "./MyBookings";
 import { BookingProvider } from "../Context/BookingContext";
+import { Profile } from "../../pages/Profile";
 
 const SideNavigation: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -79,6 +80,26 @@ const SideNavigation: React.FC = () => {
             </svg>
             <span>My Bookings</span>
           </div>
+          <div
+            className="flex items-center gap-4 p-3 hover:bg-blue-600 cursor-pointer"
+            onClick={() => setActiveMenu("My Profile")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 8h14M5 16h14M5 12h14m0 4H5"
+              />
+            </svg>
+            <span>My Profile</span>
+          </div>
         </nav>
       </div>
       <div className="flex-1 bg-gray-100 p-4">
@@ -91,9 +112,9 @@ const SideNavigation: React.FC = () => {
           {activeMenu === "My Bookings" && <MyBookings />}
           <BookingModalForm />
         </BookingProvider>
-
+        {activeMenu === "My Profile" && <Profile/>}
       </div>
-    </div>
+    </div> 
   );
 };
 
