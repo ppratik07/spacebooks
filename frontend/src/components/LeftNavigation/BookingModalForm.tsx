@@ -191,7 +191,7 @@ const ProductModal = () => {
                       Date
                     </label>
                     <input
-                      type="text"
+                      type="date"
                       name="date"
                       id="date"
                       value={formData.date}
