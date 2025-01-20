@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
     "axios": "^1.7.6",
     "konva": "^9.3.14",
     "leaflet": "^1.9.4",
