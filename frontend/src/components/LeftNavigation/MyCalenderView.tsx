@@ -1,4 +1,4 @@
-import MyFullCalendar from "../ui/Calender";
+import MyFullCalendar from "../ui/MyFullCalendar";
 
 export const MyCalenderView = () =>{
     return(
