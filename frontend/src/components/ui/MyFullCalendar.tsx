@@ -25,7 +25,7 @@ const MyFullCalendar = () => {
         const formattedEvents = data.bookings.map((booking: any) => ({
           id: booking.id,
           title: booking.title || 'Seat Booking', 
-          date: booking.date, 
+          date: booking.date
         }));
 
         setEvents(formattedEvents);
