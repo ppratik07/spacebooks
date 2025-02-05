@@ -4,7 +4,7 @@ import { MyBookings } from "./MyBookings";
 import { BookingProvider } from "../Context/BookingContext";
 import { Profile } from "../../pages/Profile";
 import { MyCalenderView } from "./MyCalenderView";
-import {DarkModeToggle} from "./"
+import { DarkModeToggle } from "../ui/DarkModeToggle";
 
 const SideNavigation: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
