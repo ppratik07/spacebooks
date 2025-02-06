@@ -65,10 +65,7 @@ const SideNavigation: React.FC = () => {
         </BookingProvider>
         {activeMenu === "My Calender" && <MyCalenderView />}
         {activeMenu === "My Profile" && <Profile />}
-        <div className="bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen p-4">
-          <DarkModeToggle/>
-          <h1 className="text-2xl font-bold">Hello, Dark Mode!</h1>
-        </div>
+      
 
       </div>
     </div>
