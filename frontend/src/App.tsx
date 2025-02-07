@@ -8,7 +8,7 @@ import RequestOtp from './pages/RequestOtp';
 import { LandingPage } from './pages/LandingPage';
 import CSVUpload from './components/ui/_CSVUpload';
 import FloorPlan from './components/ui/FloorPlan';
-import {HamburgerMenu} from './pages/HamburgerMenu'
+import { HamburgerMenu } from './pages/HamburgerMenu'
 import { MainPage } from './pages/_MainPage';
 import { MyBookings } from './components/LeftNavigation/MyBookings';
 import { ContactUsPage } from './pages/ContactUs';
@@ -17,7 +17,7 @@ import { ContactUsPage } from './pages/ContactUs';
 
 function AppContent() {
     const location = useLocation();
-    const excludeNavbarPaths = ['/login', '/register', '/resetpassword','/request-otp','/reset-password','/','/main','/hamburger','/mybookings','testpage','/confirmation','/contact-us'];
+    const excludeNavbarPaths = ['/login', '/register', '/resetpassword', '/request-otp', '/reset-password', '/', '/main', '/hamburger', '/mybookings', 'testpage', '/confirmation', '/contact-us'];
 
     return (
         <>
@@ -28,14 +28,14 @@ function AppContent() {
                 <Route path="/resetpassword" element={<ResetPassword />} />
                 <Route path="/seatlayout" element={<SeatLayout />} />
                 <Route path="/request-otp" element={<RequestOtp />} />
-                <Route path='/reset-password' element={<ResetPassword/>}/>
-                <Route path='/' element={<LandingPage/>}/>
-                <Route path='/csv' element={<CSVUpload/>}/>
-                <Route path='/floor' element={<FloorPlan/>}/>
-                <Route path='/main' element={<MainPage/>}/>
-                <Route path='/hamburger' element={<HamburgerMenu/>}/>
-                <Route path='/mybookings' element={<MyBookings/>}/>
-                <Route path='/contact-us' element={<ContactUsPage/>}/>
+                <Route path='/reset-password' element={<ResetPassword />} />
+                <Route path='/' element={<LandingPage />} />
+                <Route path='/csv' element={<CSVUpload />} />
+                <Route path='/floor' element={<FloorPlan />} />
+                <Route path='/main' element={<MainPage />} />
+                <Route path='/hamburger' element={<HamburgerMenu />} />
+                <Route path='/mybookings' element={<MyBookings />} />
+                <Route path='/contact-us' element={<ContactUsPage />} />
                 {/* <Route path='/confirmation' element={<ConfirmationPage/>}/> */}
                 {/* <Route path='/testpage' element={<TestPage/>}/> */}
             </Routes>
