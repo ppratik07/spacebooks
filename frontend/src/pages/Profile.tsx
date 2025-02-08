@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const Profile = () => {
     const [showProfilePopup, setShowProfilePopup] = useState(false);
@@ -14,7 +15,7 @@ export const Profile = () => {
         setTheme((prevtheme) => (prevtheme === "light" ? "dark" : "light"))
     }
     const GoToSupport = ()=>{
-        navigate('/')
+        navigate('/contact-us')
     }
     return (
         <div>
