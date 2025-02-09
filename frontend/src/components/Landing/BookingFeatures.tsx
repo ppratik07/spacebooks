@@ -16,7 +16,7 @@ export const BookingFeatures = () =>{
               className="w-full h-auto rounded-lg mb-4"
             />
             <p className="text-gray-800 text-lg">
-              With maximum flexibility, easily book personal desks for your team.
+              With maximum flexibility, easily book personal desks for you.
             </p>
           </div>
   
@@ -33,7 +33,7 @@ export const BookingFeatures = () =>{
               className="w-full h-auto rounded-lg mb-4"
             />
             <p className="text-gray-800 text-lg">
-              Find easy-to-book, easy-to-reschedule meeting rooms for all
+              Find easy-to-book, easy-to-reschedule meeting rooms for 
               participants.
             </p>
           </div>
