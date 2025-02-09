@@ -6,6 +6,8 @@ export const Logout: React.FC = () => {
     const handleLogOut = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('token_expiration');
+        localStorage.clear(); 
+        sessionStorage.clear();
         navigate('/login');
     }
     return (

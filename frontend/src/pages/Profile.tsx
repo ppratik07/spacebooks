@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Logout } from "./Logout";
 
 export const Profile = () => {
     const [showProfilePopup, setShowProfilePopup] = useState(false);
@@ -40,7 +41,7 @@ export const Profile = () => {
                             <span className="text-lg font-bold">Settings</span>
                             <button onClick={() => setShowProfilePopup(false)}>❌</button>
                         </div>
-                        <button className="w-full mt-2 text-left">Sign Out</button>
+                       <Logout/>
                         <div className="mt-4">
                             <h3 className="text-sm text-gray-400">Preferences</h3>
                             {/* <div className="flex justify-between items-center mt-2">
