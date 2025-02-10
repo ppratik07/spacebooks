@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { generateTimeOptions } from "../../helpers/TimeOptions";
-// import { useBooking } from "../Context/BookingContext";
 import { ConfirmationPage } from "../ui/Confirmation";
 
 const ProductModal = () => {
