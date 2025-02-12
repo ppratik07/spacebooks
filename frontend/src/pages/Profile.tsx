@@ -21,12 +21,6 @@ export const Profile = () => {
     return (
         <div>
             <div className="mt-auto relative">
-                {/* Theme Toggle */}
-                {/* <div className="flex items-center gap-4 p-3 hover:bg-blue-600 dark:hover:bg-gray-700 cursor-pointer" onClick={toggleTheme}>
-                    {theme === "light" ? <span>🌙</span> : <span>☀️</span>}
-                    <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
-                </div> */}
-
                 <div
                     className="flex items-center gap-4 p-3 hover:bg-blue-600 cursor-pointer"
                     onClick={() => setShowProfilePopup(!showProfilePopup)}
@@ -44,10 +38,6 @@ export const Profile = () => {
                        <Logout/>
                         <div className="mt-4">
                             <h3 className="text-sm text-gray-400">Preferences</h3>
-                            {/* <div className="flex justify-between items-center mt-2">
-                                <span>Theme</span>
-                                <button>🌙</button>
-                            </div> */}
                             <div className="mt-2 flex justify-between">
                                 <span>Language</span>
                                 <select className="bg-gray-800 text-white border-none">
