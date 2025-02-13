@@ -3,7 +3,7 @@ export const BookingFeatures = () =>{
         <div className="bg-gray-50 py-16 px-8">
         {/* Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Card 1 */}
+         
           <div className="relative bg-white shadow-lg rounded-2xl p-6">
             <div className="absolute -top-6 left-6">
               <span className="bg-purple-500 text-white py-1 px-4 rounded-full text-sm shadow-lg">
@@ -20,7 +20,7 @@ export const BookingFeatures = () =>{
             </p>
           </div>
   
-          {/* Card 2 */}
+        
           <div className="relative bg-white shadow-lg rounded-2xl p-6">
             <div className="absolute -top-6 left-6">
               <span className="bg-orange-400 text-white py-1 px-4 rounded-full text-sm shadow-lg">
