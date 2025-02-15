@@ -45,7 +45,8 @@ export const Profile = () => {
                                 </select>
                             </div>
                         </div>
-                        <button onClick={GoToSupport} className="mt-4 w-full bg-white text-black p-2 rounded-lg">Upgrade Plan</button>
+                        {/* Removing as per now */}
+                        {/* <button onClick={GoToSupport} className="mt-4 w-full bg-white text-black p-2 rounded-lg">Upgrade Plan</button> */}
                     </div>
                 )}
             </div>
