@@ -21,7 +21,7 @@ export const LandingHeroSection = ()  =>{
                 <div className="relative mt-10 md:mt-0">
                   
                     <img
-                        src="/personIllustrator.png"
+                        src="/personIllustrator.jpg"
                         alt="Illustration"
                         className="w-full max-w-md"
                     />
