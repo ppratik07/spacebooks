@@ -8,11 +8,11 @@ import { LogoHeader } from '../components/Landing/LogoHeading';
 
 const RequestOtp = () => {
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState('');
+    const [, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-    const handleRequestOtp = async (e: any) => {
+    const handleRequestOtp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         try {
@@ -37,7 +37,7 @@ const RequestOtp = () => {
                     <Heading label={"Reset your account"} />
                 </div>
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <InputBox label={"Email address"} id={"email"} type={"email"} value={email} onChange={(e: any) => {
+                    <InputBox label={"Email address"} id={"email"} type={"email"} value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setEmail(e.target.value);
                     }} />
                     <div className="py-2">

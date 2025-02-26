@@ -5,7 +5,7 @@ interface ConfirmationProps {
     endTime: string;
   }
 
-export const ConfirmationPage: React.FC<ConfirmationProps> = ({name,date,startTime,endTime,}) => {
+export const ConfirmationPage: React.FC<ConfirmationProps> = ({date,startTime,endTime,}) => {
 
     const formatDate = (dateStr : string)=>{
         const dateObj  = new Date(dateStr);

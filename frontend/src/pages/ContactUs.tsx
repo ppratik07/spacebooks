@@ -10,7 +10,7 @@ interface ContactUsInterface {
   message: string
 }
 export const ContactUsPage = () => {
-  const [data, setData] = useState<ContactUsInterface>({
+  const [, setData] = useState<ContactUsInterface>({
     firstname: "",
     lastname: "",
     email: "",
@@ -26,19 +26,21 @@ export const ContactUsPage = () => {
     }));
     console.log(value);
   }
-  const form = useRef();
-  const sendEmail = (e : React.ChangeEvent<HTMLInputElement>) => {
+  const form = useRef<HTMLFormElement>(null);
+  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    emailjs.sendForm('service_120mkys', 'template_6gkbtda', form.current, 'jEHKVcMHfeBQd2QUg')
-      .then((result) => {
-        console.log(result.text);
-        alert("Email has been sent. We'll be contacting in your email soon");
-        setData({ firstname: '',lastname:'', email: '',phone:'', message: '' });
+    if (form.current) {
+      emailjs.sendForm('service_120mkys', 'template_6gkbtda', form.current, 'jEHKVcMHfeBQd2QUg')
+        .then((result) => {
+          console.log(result.text);
+          alert("Email has been sent. We'll be contacting in your email soon");
+          setData({ firstname: '',lastname:'', email: '',phone:'', message: '' });
 
-      }, (error) => {
-        console.log(error.text);
-        alert("Internal Sever Error. Please try again later!");
-      });
+        }, (error) => {
+          console.log(error.text);
+          alert("Internal Sever Error. Please try again later!");
+        });
+    }
   }
 
   return (
@@ -64,7 +66,7 @@ export const ContactUsPage = () => {
         </div>
 
         <div className="mt-12 max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-8">
-          <form ref={form} method="POST" onSubmit={sendEmail} >
+        <form ref={form} method="POST" onSubmit={sendEmail as React.FormEventHandler<HTMLFormElement>}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="first-name" className="block text-sm font-medium">
@@ -130,7 +132,7 @@ export const ContactUsPage = () => {
               <textarea
                 id="message"
                 name="message"
-                rows="4"
+                rows={4}
                 placeholder="Leave a comment..."
                 className="mt-1 block w-full px-4 py-2 bg-gray-700 rounded-md border-gray-600 text-gray-200 focus:ring-blue-500 focus:border-blue-500"
               ></textarea>

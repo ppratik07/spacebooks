@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
 interface Booking {
-  id: number;
+  id: string;
   title: string; 
   date: string; 
 }
@@ -22,8 +22,9 @@ const MyFullCalendar = () => {
         }
         const data = await response.json();
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const formattedEvents = data.bookings.map((booking: any) => ({
-          id: booking.id,
+          id: booking.id.toString(),
           title: booking.title || 'Seat Booking', 
           date: booking.date
         }));

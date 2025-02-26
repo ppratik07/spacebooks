@@ -22,7 +22,13 @@ export const useBooking = () => {
   return context;
 };
 
-export const BookingProvider: React.FC = ({ children }) => {
+import { ReactNode } from "react";
+
+interface BookingProviderProps {
+  children: ReactNode;
+}
+
+export const BookingProvider: React.FC<BookingProviderProps> = ({ children }) => {
   const [bookingData, setBookingData] = useState<Booking[]>([]);
 
   return (

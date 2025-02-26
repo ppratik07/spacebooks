@@ -16,7 +16,7 @@ export const Login = () => {
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
-    const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         try {
             e.preventDefault();
             setLoading(true);
@@ -37,7 +37,7 @@ export const Login = () => {
                 localStorage.setItem('timestamp', Date.now().toString());
                 localStorage.setItem("name",name);
                 localStorage.setItem("userID",responseduserID);
-                window.location = "/hamburger";
+                window.location.href = "/hamburger";
             } else {
                 alert("invalid credentials");
             }

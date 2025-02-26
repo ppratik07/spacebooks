@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import SideNavigation from "../components/LeftNavigation/SideNavigation";
 import { BookingProvider } from "../components/Context/BookingContext";
 import { useNavigate } from "react-router-dom";

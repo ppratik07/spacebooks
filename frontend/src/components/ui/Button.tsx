@@ -2,7 +2,7 @@
 interface ButtonProps{
     label : string;
     type : string;
-    onClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export function Button({label, onClick} : ButtonProps) {

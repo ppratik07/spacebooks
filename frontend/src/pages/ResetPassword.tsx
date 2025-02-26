@@ -21,7 +21,7 @@ export const ResetPassword = () => {
         setnewPassword(e.target.value);
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/reset-password', {

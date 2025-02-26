@@ -1,23 +1,22 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Logout } from "./Logout";
 
 export const Profile = () => {
     const [showProfilePopup, setShowProfilePopup] = useState(false);
-    const [theme, setTheme] = useState<string>(() => localStorage.getItem("theme") || "light");
-    const navigate = useNavigate();
+    // const [theme, setTheme] = useState<string>(() => localStorage.getItem("theme") || "light");
+    // const navigate = useNavigate();
 
-    useEffect(() => {
-        document.documentElement.classList.toggle("dark", theme === "dark");
-        localStorage.setItem("theme", theme);
-    }, [theme])
+    // useEffect(() => {
+    //     document.documentElement.classList.toggle("dark", theme === "dark");
+    //     localStorage.setItem("theme", theme);
+    // }, [theme])
 
-    const toggleTheme = () => {
-        setTheme((prevtheme) => (prevtheme === "light" ? "dark" : "light"))
-    }
-    const GoToSupport = ()=>{
-        navigate('/contact-us')
-    }
+    // const toggleTheme = () => {
+    //     setTheme((prevtheme) => (prevtheme === "light" ? "dark" : "light"))
+    // }
+    // const GoToSupport = ()=>{
+    //     navigate('/contact-us')
+    // }
     return (
         <div>
             <div className="mt-auto relative">
